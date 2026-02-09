@@ -1,0 +1,469 @@
+{
+  "Version": "2019-10-30",
+  "StartAction": "9b89a253-b6be-4a10-8507-8cbcbf8569c5",
+  "Metadata": {
+    "entryPointPosition": {
+      "x": 39,
+      "y": 40
+    },
+    "ActionMetadata": {
+      "9b89a253-b6be-4a10-8507-8cbcbf8569c5": {
+        "position": {
+          "x": 250,
+          "y": 300
+        }
+      },
+      "9be86ec6-3d4a-4034-82c6-2af563d96cf1": {
+        "position": {
+          "x": 550,
+          "y": 300
+        }
+      },
+      "08c626d9-1e9b-41cf-acb3-25502f1997a4": {
+        "position": {
+          "x": 850,
+          "y": 300
+        },
+        "parameters": {
+          "LexV2Bot": {
+            "AliasArn": {
+              "displayName": "LiveAlias",
+              "useLexBotDropdown": true,
+              "lexV2BotName": "HealthClinicIVRBot"
+            }
+          }
+        },
+        "useLexBotDropdown": true,
+        "lexV2BotName": "HealthClinicIVRBot",
+        "lexV2BotAliasName": "LiveAlias",
+        "conditionMetadata": [
+          {
+            "id": "8e24d487-8882-4c68-ab7a-5750d7826546",
+            "value": "ProviderIntent"
+          },
+          {
+            "id": "4d495c74-82d5-4dbc-a189-7c08101682f2",
+            "value": "PatientIntent"
+          }
+        ]
+      },
+      "92379a37-8845-477e-b623-67447dc00efc": {
+        "position": {
+          "x": 1200,
+          "y": 100
+        }
+      },
+      "4a655812-dc0a-4490-b4c3-eccff59c51f4": {
+        "position": {
+          "x": 1500,
+          "y": 100
+        },
+        "parameters": {
+          "LexV2Bot": {
+            "AliasArn": {
+              "displayName": "LiveAlias",
+              "useLexBotDropdown": true,
+              "lexV2BotName": "HealthClinicProviderMenuBot"
+            }
+          }
+        },
+        "useLexBotDropdown": true,
+        "lexV2BotName": "HealthClinicProviderMenuBot",
+        "lexV2BotAliasName": "LiveAlias",
+        "conditionMetadata": [
+          {
+            "id": "b897ffcf-bc4f-4c63-83d2-5f9e1cf8a740",
+            "value": "ReferralIntent"
+          },
+          {
+            "id": "2632b9ab-a656-4051-b74d-42bc5ebf1778",
+            "value": "PriorAuthIntent"
+          },
+          {
+            "id": "85edba9c-8613-430b-bd98-2d433574f58a",
+            "value": "ClaimsBillingIntent"
+          }
+        ]
+      },
+      "9b36ce8f-d29f-4eae-9500-553fa5a2d3c7": {
+        "position": {
+          "x": 1200,
+          "y": 500
+        }
+      },
+      "6f30911f-bc5c-4c76-9a43-abea6dbc6b37": {
+        "position": {
+          "x": 1500,
+          "y": 500
+        },
+        "parameters": {
+          "LexV2Bot": {
+            "AliasArn": {
+              "displayName": "LiveAlias",
+              "useLexBotDropdown": true,
+              "lexV2BotName": "HealthClinicPatientMenuBot"
+            }
+          }
+        },
+        "useLexBotDropdown": true,
+        "lexV2BotName": "HealthClinicPatientMenuBot",
+        "lexV2BotAliasName": "LiveAlias",
+        "conditionMetadata": [
+          {
+            "id": "12290885-965f-47e4-96bf-03cc1d762f9c",
+            "value": "AppointmentIntent"
+          },
+          {
+            "id": "099f86ac-0d92-42e6-9fc1-685fd933a91e",
+            "value": "PrescriptionIntent"
+          },
+          {
+            "id": "22a81b40-b115-4bbb-88ce-5fe62d7e3301",
+            "value": "TestResultsIntent"
+          }
+        ]
+      },
+      "7a57b363-ffb3-486d-a3d3-c18d4619510e": {
+        "position": {
+          "x": 1850,
+          "y": -50
+        }
+      },
+      "b576ffd4-8dd8-4cc0-b947-ec4ba4168771": {
+        "position": {
+          "x": 1850,
+          "y": 100
+        }
+      },
+      "973104c1-6042-4745-9079-2d26866024b6": {
+        "position": {
+          "x": 1850,
+          "y": 250
+        }
+      },
+      "961bc8d0-8f4a-4a1d-9b2c-894de3a872a5": {
+        "position": {
+          "x": 1850,
+          "y": 400
+        }
+      },
+      "c15b12d7-6b38-43ac-a20b-780243b16a87": {
+        "position": {
+          "x": 1850,
+          "y": 550
+        }
+      },
+      "33baace7-254a-4ad0-9aea-65305f1a08b4": {
+        "position": {
+          "x": 1850,
+          "y": 700
+        }
+      },
+      "81cc6204-c783-40a5-8719-2eec2b966f9a": {
+        "position": {
+          "x": 1200,
+          "y": 750
+        }
+      },
+      "be2d3c11-2304-4667-928e-39c5d9d1325f": {
+        "position": {
+          "x": 2200,
+          "y": 400
+        }
+      }
+    }
+  },
+  "Actions": [
+    {
+      "Identifier": "9b89a253-b6be-4a10-8507-8cbcbf8569c5",
+      "Type": "UpdateContactTextToSpeechVoice",
+      "Parameters": {
+        "TextToSpeechVoice": "Joanna",
+        "TextToSpeechEngine": "Neural",
+        "TextToSpeechStyle": "None"
+      },
+      "Transitions": {
+        "NextAction": "9be86ec6-3d4a-4034-82c6-2af563d96cf1",
+        "Errors": [
+          {
+            "NextAction": "9be86ec6-3d4a-4034-82c6-2af563d96cf1",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Identifier": "9be86ec6-3d4a-4034-82c6-2af563d96cf1",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "Thank you for calling Sunrise Health Clinic. We are here to help you with all your healthcare needs."
+      },
+      "Transitions": {
+        "NextAction": "08c626d9-1e9b-41cf-acb3-25502f1997a4",
+        "Errors": [],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "08c626d9-1e9b-41cf-acb3-25502f1997a4",
+      "Type": "ConnectParticipantWithLexBot",
+      "Parameters": {
+        "Text": "Are you calling as a provider, or as a patient? You can say provider or press 1. Say patient or press 2.",
+        "LexV2Bot": {
+          "AliasArn": "arn:aws:lex:us-west-2:123456789012:bot-alias/MAIN_BOT_ID/MAIN_ALIAS_ID"
+        }
+      },
+      "Transitions": {
+        "NextAction": "81cc6204-c783-40a5-8719-2eec2b966f9a",
+        "Conditions": [
+          {
+            "NextAction": "92379a37-8845-477e-b623-67447dc00efc",
+            "Condition": {
+              "Operator": "Equals",
+              "Operands": [
+                "ProviderIntent"
+              ]
+            }
+          },
+          {
+            "NextAction": "9b36ce8f-d29f-4eae-9500-553fa5a2d3c7",
+            "Condition": {
+              "Operator": "Equals",
+              "Operands": [
+                "PatientIntent"
+              ]
+            }
+          }
+        ],
+        "Errors": [
+          {
+            "NextAction": "81cc6204-c783-40a5-8719-2eec2b966f9a",
+            "ErrorType": "NoMatchingCondition"
+          },
+          {
+            "NextAction": "81cc6204-c783-40a5-8719-2eec2b966f9a",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Identifier": "92379a37-8845-477e-b623-67447dc00efc",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "Thank you, provider."
+      },
+      "Transitions": {
+        "NextAction": "4a655812-dc0a-4490-b4c3-eccff59c51f4",
+        "Errors": [],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "4a655812-dc0a-4490-b4c3-eccff59c51f4",
+      "Type": "ConnectParticipantWithLexBot",
+      "Parameters": {
+        "Text": "How can we help you today? Say referral or press 1 for referrals. Say prior auth or press 2 for prior authorizations. Say claims or press 3 for claims and billing.",
+        "LexV2Bot": {
+          "AliasArn": "arn:aws:lex:us-west-2:123456789012:bot-alias/PROVIDER_BOT_ID/PROVIDER_ALIAS_ID"
+        }
+      },
+      "Transitions": {
+        "NextAction": "81cc6204-c783-40a5-8719-2eec2b966f9a",
+        "Conditions": [
+          {
+            "NextAction": "7a57b363-ffb3-486d-a3d3-c18d4619510e",
+            "Condition": {
+              "Operator": "Equals",
+              "Operands": [
+                "ReferralIntent"
+              ]
+            }
+          },
+          {
+            "NextAction": "b576ffd4-8dd8-4cc0-b947-ec4ba4168771",
+            "Condition": {
+              "Operator": "Equals",
+              "Operands": [
+                "PriorAuthIntent"
+              ]
+            }
+          },
+          {
+            "NextAction": "973104c1-6042-4745-9079-2d26866024b6",
+            "Condition": {
+              "Operator": "Equals",
+              "Operands": [
+                "ClaimsBillingIntent"
+              ]
+            }
+          }
+        ],
+        "Errors": [
+          {
+            "NextAction": "81cc6204-c783-40a5-8719-2eec2b966f9a",
+            "ErrorType": "NoMatchingCondition"
+          },
+          {
+            "NextAction": "81cc6204-c783-40a5-8719-2eec2b966f9a",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Identifier": "9b36ce8f-d29f-4eae-9500-553fa5a2d3c7",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "Thank you, patient."
+      },
+      "Transitions": {
+        "NextAction": "6f30911f-bc5c-4c76-9a43-abea6dbc6b37",
+        "Errors": [],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "6f30911f-bc5c-4c76-9a43-abea6dbc6b37",
+      "Type": "ConnectParticipantWithLexBot",
+      "Parameters": {
+        "Text": "How can we help you today? Say appointment or press 1 to schedule an appointment. Say prescription or press 2 for prescription refills. Say test results or press 3 for lab and test results.",
+        "LexV2Bot": {
+          "AliasArn": "arn:aws:lex:us-west-2:123456789012:bot-alias/PATIENT_BOT_ID/PATIENT_ALIAS_ID"
+        }
+      },
+      "Transitions": {
+        "NextAction": "81cc6204-c783-40a5-8719-2eec2b966f9a",
+        "Conditions": [
+          {
+            "NextAction": "961bc8d0-8f4a-4a1d-9b2c-894de3a872a5",
+            "Condition": {
+              "Operator": "Equals",
+              "Operands": [
+                "AppointmentIntent"
+              ]
+            }
+          },
+          {
+            "NextAction": "c15b12d7-6b38-43ac-a20b-780243b16a87",
+            "Condition": {
+              "Operator": "Equals",
+              "Operands": [
+                "PrescriptionIntent"
+              ]
+            }
+          },
+          {
+            "NextAction": "33baace7-254a-4ad0-9aea-65305f1a08b4",
+            "Condition": {
+              "Operator": "Equals",
+              "Operands": [
+                "TestResultsIntent"
+              ]
+            }
+          }
+        ],
+        "Errors": [
+          {
+            "NextAction": "81cc6204-c783-40a5-8719-2eec2b966f9a",
+            "ErrorType": "NoMatchingCondition"
+          },
+          {
+            "NextAction": "81cc6204-c783-40a5-8719-2eec2b966f9a",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Identifier": "7a57b363-ffb3-486d-a3d3-c18d4619510e",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "You selected referrals. To submit a referral, please fax your referral form to 5 5 5, 1 2 3, 4 5 6 7, or visit our provider portal at sunrise health clinic dot com slash providers. A member of our referral team will process your request within 2 business days. Thank you for calling. Goodbye."
+      },
+      "Transitions": {
+        "NextAction": "be2d3c11-2304-4667-928e-39c5d9d1325f",
+        "Errors": [],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "b576ffd4-8dd8-4cc0-b947-ec4ba4168771",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "You selected prior authorizations. To submit or check the status of a prior authorization, please visit our provider portal at sunrise health clinic dot com slash prior auth, or call our prior authorization department directly at 5 5 5, 9 8 7, 6 5 4 3. Our team is available Monday through Friday, 8 AM to 5 PM. Thank you for calling. Goodbye."
+      },
+      "Transitions": {
+        "NextAction": "be2d3c11-2304-4667-928e-39c5d9d1325f",
+        "Errors": [],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "973104c1-6042-4745-9079-2d26866024b6",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "You selected claims and billing. For claims status inquiries or billing questions, please visit our provider portal at sunrise health clinic dot com slash claims. You may also email our billing department at billing at sunrise health clinic dot com. Our billing team will respond within 1 business day. Thank you for calling. Goodbye."
+      },
+      "Transitions": {
+        "NextAction": "be2d3c11-2304-4667-928e-39c5d9d1325f",
+        "Errors": [],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "961bc8d0-8f4a-4a1d-9b2c-894de3a872a5",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "You selected appointments. To schedule, reschedule, or cancel an appointment, please visit our patient portal at sunrise health clinic dot com slash appointments, or you may call our scheduling desk directly at 5 5 5, 2 3 4, 5 6 7 8 during business hours, Monday through Friday, 8 AM to 6 PM. Thank you for calling. Goodbye."
+      },
+      "Transitions": {
+        "NextAction": "be2d3c11-2304-4667-928e-39c5d9d1325f",
+        "Errors": [],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "c15b12d7-6b38-43ac-a20b-780243b16a87",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "You selected prescription refills. To request a prescription refill, please log into your patient portal at sunrise health clinic dot com slash prescriptions, or contact your pharmacy directly. Please allow 48 hours for refill requests to be processed. Thank you for calling. Goodbye."
+      },
+      "Transitions": {
+        "NextAction": "be2d3c11-2304-4667-928e-39c5d9d1325f",
+        "Errors": [],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "33baace7-254a-4ad0-9aea-65305f1a08b4",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "You selected test results. Your lab and test results are available through our patient portal at sunrise health clinic dot com slash results. Results are typically available within 3 to 5 business days. If you have urgent questions about your results, please contact your providers office directly. Thank you for calling. Goodbye."
+      },
+      "Transitions": {
+        "NextAction": "be2d3c11-2304-4667-928e-39c5d9d1325f",
+        "Errors": [],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "81cc6204-c783-40a5-8719-2eec2b966f9a",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "Sorry, we were unable to understand your selection. Please try calling again. Goodbye."
+      },
+      "Transitions": {
+        "NextAction": "be2d3c11-2304-4667-928e-39c5d9d1325f",
+        "Errors": [],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "be2d3c11-2304-4667-928e-39c5d9d1325f",
+      "Type": "DisconnectParticipant",
+      "Parameters": {},
+      "Transitions": {}
+    }
+  ]
+}

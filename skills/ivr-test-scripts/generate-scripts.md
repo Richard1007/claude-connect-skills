@@ -2,123 +2,154 @@
 
 ## Dialogue Format
 
-Every scenario uses this conversational format:
+Every scenario uses this concise format:
 
 ```markdown
-## Scenario N: [Descriptive Name]
+## S1: [Descriptive Name]
+**Test when:** [When to test — e.g., Mon-Fri, Sat-Sun]
 
-**Purpose:** [What this scenario specifically tests]
-
-Caller: [Dials +1 (800) 555-0100]
-
-Expected: System plays greeting: "[exact greeting text from flow JSON]"
-
-Expected: System plays menu prompt: "[exact menu text from flow JSON]"
-
-Caller: [Action — e.g., Says "provider" / Presses 1 on keypad]
-
-Expected: System plays: "[exact response text from flow JSON]"
-
-Expected: System plays sub-menu prompt: "[exact sub-menu text from flow JSON]"
-
+System: "[exact system prompt text]"
+Caller: [Action — e.g., Press 1 / Say "check my status" / Enter 123456789#]
+System: "[next prompt text]"
 Caller: [Next action]
-
-Expected: System plays: "[exact final prompt from flow JSON]"
-
-Expected: Call disconnects.
+System: "[response text]"
+System: Transfers to [queue] / Call disconnects
 ```
 
 ## Rules
 
+### System Lines
+- Quote the exact TTS text from the flow JSON in double quotes
+- For actions (not speech), describe without quotes: `System: Transfers to Tier 1 queue`
+- For repeated prompt sequences, abbreviate after first full occurrence: `System: EN greeting + auth prompt`
+- Always include the final outcome: transfer, disconnect, or callback confirmation
+
 ### Caller Lines
-Write caller actions naturally and descriptively:
+Keep caller actions short and direct:
 
-**DTMF actions:**
-- `Caller: Dials +1 (800) 555-0100`
-- `Caller: Presses 1 on keypad`
-- `Caller: Presses # on keypad`
-- `Caller: Rapidly presses 5, 5, 5 on keypad`
+**DTMF:**
+- `Caller: Press 1`
+- `Caller: Enter 123456789#`
+- `Caller: Enter 01151990#`
 
-**Voice actions:**
-- `Caller: Says "provider"`
-- `Caller: Says "I'm a doctor calling about a patient"`
-- `Caller: Says "I need to schedule an appointment please"`
-- `Caller: Says "um... I think I need... a prescription refill?"`
+**Voice:**
+- `Caller: Say "check my authorization status"`
+- `Caller: Say "I'd like to speak with a representative please"`
+- `Caller: Say "um... I think I need to... check my authorization?"`
 
 **Silence / timeout:**
-- `Caller: [Remains silent — no input for 10+ seconds]`
+- `Caller: Silent for 10+ seconds`
 
-**Ambiguous / invalid:**
-- `Caller: Says "blue elephant sandwich"`
-- `Caller: Coughs loudly into the phone`
-- `Caller: Says "hello? is anyone there?"`
+**Invalid:**
+- `Caller: Say "blue elephant sandwich"`
+- `Caller: Press 7`
+- `Caller: Press # or *`
 
-### Expected Lines
-Always quote the exact system prompt text:
+### Test When Lines
+Each scenario must state when it can be tested:
+- `**Test when:** Mon-Fri` — for business-hours paths
+- `**Test when:** Sat-Sun` — for after-hours paths
+- `**Test when:** Mon-Fri (after successful auth)` — for paths that require prior steps
+- `**Test when:** Mon-Fri (requires Tier 1 queue at capacity)` — for conditional paths
 
-- `Expected: System plays greeting: "[verbatim text]"`
-- `Expected: System plays menu prompt: "[verbatim text]"`
-- `Expected: System plays: "[verbatim text]"`
-- `Expected: System plays error message: "[verbatim text]"`
-- `Expected: Call disconnects.`
-
-For Lex bot interactions, note what happens internally:
-- `Expected: Lex bot matches ProviderIntent (confidence > 0.40). System plays: "[text]"`
-- `Expected: Lex bot matches FallbackIntent — no recognized input. System routes to error.`
-
-### Purpose Lines
-Each scenario must explain WHY it exists:
-- `Purpose: Test the complete happy path for a provider calling about referrals using DTMF input`
-- `Purpose: Verify the system handles unrecognized speech at the main menu level`
-- `Purpose: Test that pressing special keys (#, *) at sub-menus routes to the error path`
-- `Purpose: Test mixed input — DTMF at level 1, voice at level 2`
+### Scenario Naming
+Use short IDs and descriptive names:
+- `## S1: EN - Check Auth Status (DTMF)`
+- `## S8: ES - Check Auth Status (DTMF)`
+- `## S11: Auth Retry - First Failure Then Success`
+- `## S18: After Hours - EN Callback`
 
 ## Scenario Categories
 
 ### 1. Happy Path — DTMF
-One scenario per valid end-to-end path using only keypad input. Callers press digits.
+One scenario per valid end-to-end path using keypad input.
 
-### 2. Happy Path — Voice (Primary Keyword)
-Same paths but caller says the primary keyword (e.g., "provider", "referral").
+### 2. Happy Path — Voice
+Same paths but caller uses natural speech. Vary phrasings across scenarios.
 
-### 3. Happy Path — Voice (Full Phrases)
-Same paths but caller uses natural full sentences (e.g., "I'm a doctor calling about a patient").
+### 3. Mixed Input
+DTMF at one step, voice at another. Tests input method switching.
 
-### 4. Happy Path — Voice (Synonyms)
-Caller uses alternate words not in the menu prompt (e.g., "doctor" instead of "provider", "member" instead of "patient").
+### 4. Error — Invalid Input
+Invalid DTMF or unrecognized speech at each menu level.
 
-### 5. Happy Path — Mixed Input
-DTMF at one menu level, voice at another. Tests that switching input methods works.
+### 5. Error — Timeout / Silence
+Caller stays silent at each menu level.
 
-### 6. Error — Invalid Input
-Invalid DTMF digits or unrecognized speech at each menu level.
+### 6. Edge Cases
+Special keys (#, *, 0), hesitant speech, out-of-domain phrases ("help"), retry limits.
 
-### 7. Error — Timeout / Silence
-Caller remains silent at each menu level.
+### 7. After Hours
+All after-hours paths: callback, voicemail, timeout, invalid input.
 
-### 8. Edge Cases
-Special keys (#, *, 0), ambiguous speech, barge-in during prompts, caller hesitates.
+### 8. Queue Overflow
+Tier escalation, both-tiers-full callback, end-call options.
+
+## Abbreviation Rules
+
+After the first scenario shows the full prompt text for a repeated sequence, later scenarios may abbreviate:
+
+| First occurrence (full text) | Abbreviated form |
+|-----|-----|
+| `System: "For English, press 1. Para español, oprima el número 2."` | `System: Language selection` |
+| `System: "Thank you for calling..." + auth prompt` | `System: EN greeting + auth prompt` |
+| `System: "Gracias por llamar..." + auth prompt` | `System: ES greeting + auth prompt` |
+| Full auth exchange (member ID + DOB) | `Caller: Enter 987654321# then 07041985#` |
 
 ## Voice Utterance Variety
 
-For voice scenarios, vary the caller's phrasing across scenarios:
+For voice scenarios, vary the caller's phrasing:
 
-| Scenario Type | Example Caller Lines |
-|---------------|---------------------|
-| Primary keyword | Says "provider" |
-| Full phrase | Says "I'm calling as a healthcare provider" |
-| Synonym | Says "doctor" |
-| Casual | Says "yeah I'm a provider" |
-| Hesitant | Says "um... provider? I think?" |
+| Type | Example |
+|------|---------|
+| Primary keyword | Say "check my authorization status" |
+| Full phrase | Say "I'd like to speak with a representative please" |
+| Casual | Say "call me back later" |
+| Hesitant | Say "um... I think I need to... check my authorization?" |
+
+## Output Structure
+
+```markdown
+# [Flow Name] - Test Scripts
+
+**Phone:** +1 (XXX) XXX-XXXX
+**Hours:** [business hours description]
+**Bots:** [bot names and IDs]
+
+---
+
+## S1: [Name]
+**Test when:** [condition]
+
+System: "[prompt]"
+Caller: [action]
+System: "[response]"
+...
+
+---
+
+## S2: [Name]
+...
+
+---
+
+## Coverage Matrix
+
+| Path | DTMF | Voice | Error | Timeout |
+|------|------|-------|-------|---------|
+| EN Check Auth | S1 | S4 | S14 | S15 |
+| ... | ... | ... | ... | ... |
+```
 
 ## Coverage Checklist
 
 After generating all scenarios, verify:
 - [ ] Every valid end-to-end path has a DTMF scenario
-- [ ] Every valid end-to-end path has a Voice scenario
-- [ ] At least 2 synonym/phrase variations tested per menu level
+- [ ] Every valid end-to-end path has a Voice scenario (if Lex is used)
 - [ ] Invalid input tested at every menu level (DTMF + Voice)
 - [ ] Timeout tested at every menu level
 - [ ] Special keys (#, *, 0) tested
 - [ ] At least one mixed-input scenario exists
-- [ ] At least one ambiguous/hesitant caller scenario exists
+- [ ] After-hours paths all covered (if applicable)
+- [ ] Queue overflow paths all covered (if applicable)
+- [ ] Coverage matrix has no empty cells

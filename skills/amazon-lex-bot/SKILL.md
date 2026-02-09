@@ -1,6 +1,6 @@
 ---
 name: amazon-lex-bot
-description: Use this skill any time an Amazon Lex V2 bot is involved — creating, modifying, building, or deploying bots. This includes: creating bots for Amazon Connect IVR voice+DTMF input, defining intents with sample utterances, configuring slots, building and versioning bots, creating aliases, and associating bots with Connect instances. Trigger whenever the user mentions "Lex bot," "voice recognition," "intents," "utterances," "NLU," or needs callers to speak their choices instead of only pressing digits.
+description: Create, build, version, and deploy Amazon Lex V2 bots for Connect IVR voice and DTMF input. Trigger on Lex bot, intents, utterances, NLU, or voice recognition references.
 ---
 
 # Amazon Lex V2 Bot Skill
@@ -20,6 +20,36 @@ description: Use this skill any time an Amazon Lex V2 bot is involved — creati
 3. **Build before deploy** — Bot must be built (`build-bot-locale`) before creating a version or alias.
 4. **Test before connecting** — Validate the bot responds correctly before referencing it in a Connect flow.
 5. **IAM role required** — Lex bots need a service-linked role.
+
+## Prerequisite Questions (MANDATORY)
+
+**Before starting ANY work, you MUST ask the user these questions and wait for answers:**
+
+### Question 1: Input Source
+Ask: **"How will you provide the existing IVR or Lex Bot?"**
+- **Upload JSON** — User will paste or upload an existing bot configuration or export
+- **Give me access to AWS** — User will provide AWS profile so you can pull the existing bot directly from AWS
+- **Create a new one** — No existing bot; build from scratch based on requirements
+
+### Question 2: Output Delivery
+Ask: **"How would you like to receive the output?"**
+- **Save directly to your AWS account** — Create/deploy the Lex bot directly to the user's AWS account and associate with their Connect instance
+- **Give them as JSON files** — Export the bot configuration, intents, utterances, and deployment script as local files only (no AWS deployment)
+
+### Question 3: AWS Target (if deploying to AWS)
+If the user chose "Save directly to AWS" or "Give me access to AWS", you MUST also ask:
+- **AWS CLI profile name** (e.g., `haohai`, `default`, `prod`)
+- **Amazon Connect Instance** (for bot association) — List available instances using `aws connect list-instances --profile <PROFILE>` and let the user pick one
+
+**CRITICAL:** Always confirm the profile and instance with the user before running any AWS commands. Double-check by displaying the instance alias/name. Deploying to the wrong AWS account or associating with the wrong Connect instance can break production IVR flows.
+
+### Confirmation Gate
+After collecting all answers, summarize back to the user:
+> "I will [create/edit] the Lex bot and [deploy to AWS profile `X`, associate with Connect instance `Y` / save as JSON files]. Is that correct?"
+
+**Do NOT proceed until the user confirms.**
+
+---
 
 ## What To Do
 

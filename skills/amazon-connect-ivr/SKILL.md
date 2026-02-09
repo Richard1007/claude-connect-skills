@@ -1,6 +1,6 @@
 ---
 name: amazon-connect-ivr
-description: Use this skill any time an Amazon Connect contact flow (IVR) is involved — as input, output, or both. This includes: creating IVR flows from scratch, reading/parsing/modifying existing flow JSON, adding or removing blocks, configuring DTMF menus, integrating Lex bots for voice input, setting up error handling, and exporting final flow JSON. Trigger whenever the user mentions "IVR," "contact flow," "call flow," "phone tree," "Amazon Connect flow," or references a flow JSON file. If a contact flow needs to be created, edited, validated, or deployed, use this skill.
+description: Create, edit, validate, and deploy Amazon Connect contact flow (IVR) JSON. Trigger on IVR, contact flow, call flow, phone tree, or flow JSON references.
 ---
 
 # Amazon Connect IVR Skill
@@ -31,8 +31,30 @@ description: Use this skill any time an Amazon Connect contact flow (IVR) is inv
 - **Space blocks visually** — Position blocks left-to-right with ~250px horizontal spacing and ~150px vertical spacing between branches.
 - **Export the final JSON** — Always save the final flow JSON to a file the user can import.
 
+## CRITICAL: Correct Block Type Names
+
+These type names are **wrong** and will cause `InvalidContactFlowException` on deploy:
+
+| WRONG (will fail) | CORRECT (use this) |
+|---|---|
+| `InvokeExternalResource` | `InvokeLambdaFunction` |
+| `Loop` | `Compare` + `UpdateContactAttributes` counter |
+
+Parameter names also differ:
+- WRONG: `FunctionArn`, `TimeLimit`
+- CORRECT: `LambdaFunctionARN`, `InvocationTimeLimitSeconds`
+
+Always include `TextToSpeechStyle: "None"` in `UpdateContactTextToSpeechVoice` blocks.
+
+Always call `UpdateContactTargetQueue` before `TransferContactToQueue` — you cannot pass a QueueId directly to TransferContactToQueue.
+
+Always call `UpdateContactTargetQueue` before `CheckHoursOfOperation` — the hours check uses the queue's hours. If no queue is set, it returns False (closed) regardless of actual hours.
+
+See [flow-components.md](flow-components.md) for all 24 verified block types with correct schemas.
+
 ## What To Avoid
 
+- **Don't use `InvokeExternalResource` or `Loop`** — These types are rejected by the API. See the table above.
 - **Don't use `GetParticipantInput` for multi-digit input** — It only supports single digits (0-9, #, *). Use `StoreInput` for multi-digit.
 - **Don't forget `Conditions` array in `GetParticipantInput`** — Each DTMF option needs a separate condition entry.
 - **Don't hardcode contact flow ARNs** — Use placeholder comments if referencing other flows.
@@ -42,6 +64,7 @@ description: Use this skill any time an Amazon Connect contact flow (IVR) is inv
 - **Don't create blocks without Metadata positions** — The flow editor will break.
 - **Don't mix up `GetParticipantInput` (DTMF-only) and `ConnectParticipantWithLexBot` (Lex V2)** — These are different action types. Use `ConnectParticipantWithLexBot` when integrating with a Lex V2 bot.
 - **Don't use `ConnectParticipantWithLexBot` without first creating and deploying the Lex bot** — The bot alias ARN must exist.
+- **Don't call `TransferContactToQueue` without `UpdateContactTargetQueue` first** — The queue must be set before transferring.
 - **NEVER generate invalid UUIDs** — Always use proper v4 UUID format (8-4-4-4-12 hex).
 
 ## Flow JSON Structure
@@ -73,15 +96,46 @@ description: Use this skill any time an Amazon Connect contact flow (IVR) is inv
 }
 ```
 
+## Prerequisite Questions (MANDATORY)
+
+**Before starting ANY work, you MUST ask the user these questions and wait for answers:**
+
+### Question 1: Input Source
+Ask: **"How will you provide the existing IVR or Lex Bot?"**
+- **Upload JSON** — User will paste or upload an existing contact flow JSON file
+- **Give me access to AWS** — User will provide AWS profile and instance ID so you can pull the existing flow directly from AWS
+- **Create a new one** — No existing flow; build from scratch based on requirements
+
+### Question 2: Output Delivery
+Ask: **"How would you like to receive the output?"**
+- **Save directly to your AWS account** — Deploy the IVR flow and/or Lex bot directly to the user's Connect instance via AWS CLI
+- **Give them as JSON files** — Export the flow JSON and bot configuration as local files only (no AWS deployment)
+
+### Question 3: AWS Target (if deploying to AWS)
+If the user chose "Save directly to AWS" or "Give me access to AWS", you MUST also ask:
+- **AWS CLI profile name** (e.g., `haohai`, `default`, `prod`)
+- **Amazon Connect Instance** — List available instances using `aws connect list-instances --profile <PROFILE>` and let the user pick one
+
+**CRITICAL:** Always confirm the profile and instance with the user before running any AWS commands. Double-check by displaying the instance alias/name. Deploying to the wrong Connect instance or AWS account can cause production outages.
+
+### Confirmation Gate
+After collecting all answers, summarize back to the user:
+> "I will [create/edit] the IVR flow and [deploy to AWS profile `X`, instance `Y` / save as JSON files]. Is that correct?"
+
+**Do NOT proceed until the user confirms.**
+
+---
+
 ## Workflow
 
-1. Gather requirements from user
-2. If Lex bot integration is needed, use the `amazon-lex-bot` skill first
-3. Read [create-from-scratch.md](create-from-scratch.md) or [edit-existing.md](edit-existing.md)
-4. Generate the flow JSON
-5. Run QA per [qa-validation.md](qa-validation.md) — **loop until all issues resolved**
-6. Export the final JSON file to the user
-7. Optionally deploy to AWS using `aws connect create-contact-flow` or `update-contact-flow-content`
+1. **Ask prerequisite questions** (see above) — wait for user confirmation
+2. Gather detailed IVR requirements from user
+3. If Lex bot integration is needed, use the `amazon-lex-bot` skill first
+4. Read [create-from-scratch.md](create-from-scratch.md) or [edit-existing.md](edit-existing.md)
+5. Generate the flow JSON
+6. Run QA per [qa-validation.md](qa-validation.md) — **loop until all issues resolved**
+7. Export the final JSON file to the user
+8. If user chose AWS deployment: deploy using `aws connect create-contact-flow` or `update-contact-flow-content`
 
 ## Deploying to AWS
 

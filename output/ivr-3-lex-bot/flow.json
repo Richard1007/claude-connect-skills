@@ -1,0 +1,169 @@
+{
+  "Version": "2019-10-30",
+  "StartAction": "83a741f1-67dd-4544-a5f6-e446d780b481",
+  "Metadata": {
+    "entryPointPosition": { "x": 39, "y": 40 },
+    "ActionMetadata": {
+      "83a741f1-67dd-4544-a5f6-e446d780b481": { "position": { "x": 250, "y": 40 } },
+      "d98c1067-5223-41a2-aaef-9421d573303c": { "position": { "x": 500, "y": 40 } },
+      "daaa5c8d-d72d-435e-80ea-9d10a04d1a5d": { "position": { "x": 750, "y": 40 } },
+      "440478d1-4d88-4a2b-b3c5-426857d3ac60": { "position": { "x": 1050, "y": -150 } },
+      "6f76aac6-9066-46c4-8b64-2312bc3043f9": { "position": { "x": 1050, "y": 40 } },
+      "203f7007-8e08-49f0-bdda-05b9c080d3aa": { "position": { "x": 1050, "y": 230 } },
+      "7a06de36-b23f-4e05-9afe-3502a99094e2": { "position": { "x": 1300, "y": -150 } },
+      "60fb8c2f-369d-4e1b-b75a-b7fe23d4958b": { "position": { "x": 1300, "y": 40 } },
+      "91f0bacb-3d98-4784-a75a-b50dd4d555d1": { "position": { "x": 1300, "y": 230 } },
+      "f351c7c8-5bc0-4e03-b6b0-ed7e311d294d": { "position": { "x": 1550, "y": 40 } },
+      "2823f18b-ebc6-44f7-b054-7d9381a89008": { "position": { "x": 1050, "y": 400 } },
+      "85e561a4-f6fb-4289-9b10-d2cef0080096": { "position": { "x": 1300, "y": 400 } }
+    }
+  },
+  "Actions": [
+    {
+      "Identifier": "83a741f1-67dd-4544-a5f6-e446d780b481",
+      "Type": "UpdateContactTextToSpeechVoice",
+      "Parameters": {
+        "TextToSpeechEngine": "Neural",
+        "TextToSpeechStyle": "None",
+        "TextToSpeechVoice": "Joanna"
+      },
+      "Transitions": {
+        "NextAction": "d98c1067-5223-41a2-aaef-9421d573303c",
+        "Errors": [
+          { "ErrorType": "NoMatchingError", "NextAction": "f351c7c8-5bc0-4e03-b6b0-ed7e311d294d" }
+        ]
+      }
+    },
+    {
+      "Identifier": "d98c1067-5223-41a2-aaef-9421d573303c",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "Welcome to the department directory."
+      },
+      "Transitions": {
+        "NextAction": "daaa5c8d-d72d-435e-80ea-9d10a04d1a5d",
+        "Errors": [
+          { "ErrorType": "NoMatchingError", "NextAction": "f351c7c8-5bc0-4e03-b6b0-ed7e311d294d" }
+        ],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "daaa5c8d-d72d-435e-80ea-9d10a04d1a5d",
+      "Type": "ConnectParticipantWithLexBot",
+      "Parameters": {
+        "Text": "You can say sales, support, or billing. Or press 1 for sales, 2 for support, or 3 for billing.",
+        "LexV2Bot": {
+          "AliasArn": "arn:aws:lex:us-west-2:988066449281:bot-alias/GTXWRVOOML/VDBMHJHN3R"
+        }
+      },
+      "Transitions": {
+        "NextAction": "2823f18b-ebc6-44f7-b054-7d9381a89008",
+        "Conditions": [
+          {
+            "NextAction": "440478d1-4d88-4a2b-b3c5-426857d3ac60",
+            "Condition": { "Operator": "Equals", "Operands": ["SalesIntent"] }
+          },
+          {
+            "NextAction": "6f76aac6-9066-46c4-8b64-2312bc3043f9",
+            "Condition": { "Operator": "Equals", "Operands": ["SupportIntent"] }
+          },
+          {
+            "NextAction": "203f7007-8e08-49f0-bdda-05b9c080d3aa",
+            "Condition": { "Operator": "Equals", "Operands": ["BillingIntent"] }
+          }
+        ],
+        "Errors": [
+          { "ErrorType": "NoMatchingCondition", "NextAction": "2823f18b-ebc6-44f7-b054-7d9381a89008" },
+          { "ErrorType": "NoMatchingError", "NextAction": "f351c7c8-5bc0-4e03-b6b0-ed7e311d294d" }
+        ]
+      }
+    },
+    {
+      "Identifier": "440478d1-4d88-4a2b-b3c5-426857d3ac60",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "Connecting you to the sales department. Thank you for calling."
+      },
+      "Transitions": {
+        "NextAction": "7a06de36-b23f-4e05-9afe-3502a99094e2",
+        "Errors": [
+          { "ErrorType": "NoMatchingError", "NextAction": "7a06de36-b23f-4e05-9afe-3502a99094e2" }
+        ],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "7a06de36-b23f-4e05-9afe-3502a99094e2",
+      "Type": "DisconnectParticipant",
+      "Parameters": {},
+      "Transitions": {}
+    },
+    {
+      "Identifier": "6f76aac6-9066-46c4-8b64-2312bc3043f9",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "Connecting you to the support department. Thank you for calling."
+      },
+      "Transitions": {
+        "NextAction": "60fb8c2f-369d-4e1b-b75a-b7fe23d4958b",
+        "Errors": [
+          { "ErrorType": "NoMatchingError", "NextAction": "60fb8c2f-369d-4e1b-b75a-b7fe23d4958b" }
+        ],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "60fb8c2f-369d-4e1b-b75a-b7fe23d4958b",
+      "Type": "DisconnectParticipant",
+      "Parameters": {},
+      "Transitions": {}
+    },
+    {
+      "Identifier": "203f7007-8e08-49f0-bdda-05b9c080d3aa",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "Connecting you to the billing department. Thank you for calling."
+      },
+      "Transitions": {
+        "NextAction": "91f0bacb-3d98-4784-a75a-b50dd4d555d1",
+        "Errors": [
+          { "ErrorType": "NoMatchingError", "NextAction": "91f0bacb-3d98-4784-a75a-b50dd4d555d1" }
+        ],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "91f0bacb-3d98-4784-a75a-b50dd4d555d1",
+      "Type": "DisconnectParticipant",
+      "Parameters": {},
+      "Transitions": {}
+    },
+    {
+      "Identifier": "2823f18b-ebc6-44f7-b054-7d9381a89008",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "Sorry, I did not understand your selection. Please try again later. Goodbye."
+      },
+      "Transitions": {
+        "NextAction": "85e561a4-f6fb-4289-9b10-d2cef0080096",
+        "Errors": [
+          { "ErrorType": "NoMatchingError", "NextAction": "85e561a4-f6fb-4289-9b10-d2cef0080096" }
+        ],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "85e561a4-f6fb-4289-9b10-d2cef0080096",
+      "Type": "DisconnectParticipant",
+      "Parameters": {},
+      "Transitions": {}
+    },
+    {
+      "Identifier": "f351c7c8-5bc0-4e03-b6b0-ed7e311d294d",
+      "Type": "DisconnectParticipant",
+      "Parameters": {},
+      "Transitions": {}
+    }
+  ]
+}

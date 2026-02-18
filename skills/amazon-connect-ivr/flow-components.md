@@ -2,7 +2,7 @@
 
 > **VERIFIED** — Every type and schema in this file was extracted from real deployed Amazon Connect flows (Version 2019-10-30). Use ONLY the types listed here.
 
-## All Valid Action Types (24)
+## All Valid Action Types (25)
 
 ### Interaction — Caller-facing blocks
 
@@ -57,6 +57,7 @@
 | Type | When to Use | UI Block Name |
 |------|-------------|---------------|
 | `InvokeLambdaFunction` | Call an AWS Lambda function and use its return values via `$.External.*` | Invoke AWS Lambda function |
+| `CreateWisdomSession` | Create a Q Connect (Wisdom) session on the contact — **MUST be called before** `ConnectParticipantWithLexBot` when using `AMAZON.QinConnectIntent` | Connect assistant |
 
 ---
 
@@ -605,6 +606,15 @@ Set TTS voice, engine, and style. **Always include `TextToSpeechStyle`.**
 **Voice options (en-US):** `"Joanna"`, `"Matthew"`, `"Ivy"`, `"Kendra"`, `"Kimberly"`, `"Salli"`, `"Joey"`, `"Justin"`, `"Ruth"`, `"Stephen"`, `"Gregory"`, `"Danielle"`
 **Voice options (es-US):** `"Lupe"`, `"Pedro"`
 
+**Generative (Polly Generative) voices** — Use with `TextToSpeechEngine: "Generative"`:
+| Voice | Locale | Gender | Verified |
+|-------|--------|--------|----------|
+| `Matthew` | en-US | Masculine | ✅ Deployed + tested (IVR #7) |
+| `Ruth` | en-US | Feminine | Supported |
+| `Amy` | en-GB | Feminine | Supported |
+
+**IMPORTANT: `TextToSpeechEngine: "Generative"` = Polly Generative, NOT Nova Sonic.** Nova Sonic is a separate Bedrock Realtime API (`amazon.nova-sonic-v1:0`) that cannot be used directly in Connect flow JSON. Connect "Conversational AI bots" with Nova Sonic are configured in the console only, not via CLI/API flow actions. See the "Generative TTS vs Nova Sonic" section below for details.
+
 ---
 
 ### UpdateContactRecordingBehavior
@@ -760,6 +770,43 @@ Play a looping message (typically SSML with breaks) for queue hold music or repe
 
 ---
 
+### CreateWisdomSession
+
+Create a Q Connect (Wisdom) session on the contact. **Required before** `ConnectParticipantWithLexBot` when using `AMAZON.QinConnectIntent` for Q Connect AI agent self-service.
+
+```json
+{
+  "Identifier": "uuid-here",
+  "Type": "CreateWisdomSession",
+  "Parameters": {
+    "WisdomAssistantArn": "arn:aws:wisdom:REGION:ACCOUNT:assistant/ASSISTANT_ID"
+  },
+  "Transitions": {
+    "NextAction": "next-uuid",
+    "Errors": [
+      { "NextAction": "error-uuid", "ErrorType": "NoMatchingError" }
+    ],
+    "Conditions": []
+  }
+}
+```
+
+**Key points:**
+- Must appear BEFORE the `ConnectParticipantWithLexBot` block that uses `AMAZON.QinConnectIntent`
+- Without this block, the Lex bot has no session ARN and the Q Connect AI agent never triggers
+- The `WisdomAssistantArn` uses the `wisdom` service namespace (not `qconnect`)
+- Only `NoMatchingError` error type is supported
+- The session ARN is automatically passed to the Lex bot by Amazon Connect
+
+**Verified (IVR #8) — Deployment + Test API behavior:**
+- Deploys successfully with `WisdomAssistantArn` parameter
+- **CreateWisdomSession is a SILENT block** — no `MessageReceived` event in test API
+- Requires QIC assistant to be associated with the Connect instance first via `aws connect create-integration-association --integration-type WISDOM_ASSISTANT`
+- ARN uses `wisdom` namespace: `arn:aws:wisdom:REGION:ACCOUNT:assistant/ASSISTANT_ID`
+- Test API rejects observations with empty `Text: ""` — must include at least some text content in every `MessageReceived` observation
+
+---
+
 ### InvokeLambdaFunction
 
 Call an AWS Lambda function. Return values accessible via `$.External.*` in subsequent blocks.
@@ -853,6 +900,51 @@ GetParticipantInput (StoreInput=True, phone validation)
   → CreateCallbackContact (delay, attempts, retry)
   → DisconnectParticipant
 ```
+
+---
+
+## Pattern: Generative TTS (Polly Generative Engine)
+
+**Verified (IVR #7):** `TextToSpeechEngine: "Generative"` deploys and tests successfully. This uses **Amazon Polly Generative** — a higher-quality TTS engine, NOT Nova Sonic.
+
+### Flow pattern
+
+```
+Entry
+  → UpdateContactTextToSpeechVoice (Generative engine, voice: Matthew)
+  → MessageParticipant ("Hello, this is generative TTS...")
+  → DisconnectParticipant
+```
+
+### Test API behavior
+- Generative TTS text is observable in `MessageReceived` events (same as Neural/Standard)
+- No difference in test API behavior between Neural and Generative engines
+- Voice name is NOT included in test observations — only text content
+
+---
+
+## Clarification: Generative TTS vs Nova Sonic
+
+| | Polly Generative | Nova Sonic |
+|---|---|---|
+| **What** | Higher-quality TTS engine in Amazon Polly | Speech-to-Speech foundation model in Bedrock |
+| **Flow JSON** | `TextToSpeechEngine: "Generative"` | NOT available in flow JSON |
+| **API** | Standard Polly API via Connect | `amazon.nova-sonic-v1:0` via Bedrock `InvokeModelWithBidirectionalStream` |
+| **Setup** | Just set engine in flow JSON | Console-only: "Conversational AI bots" with locale speech model |
+| **CLI/API deploy** | ✅ Yes | ❌ Console only (as of Feb 2026) |
+| **Regions** | All Connect regions | us-east-1, us-west-2 |
+| **Testable** | ✅ Yes, via Native Test API | Unknown (console-managed) |
+
+**Key takeaway:** If you need programmable, CLI-deployable generative voice in Connect flows, use `TextToSpeechEngine: "Generative"` (Polly Generative). Nova Sonic requires console setup and is not controllable via flow JSON actions.
+
+### Nova Sonic (for reference — console-only)
+
+Nova Sonic S2S is configured through Amazon Connect's "Conversational AI bots" UI:
+1. Create a Conversational AI bot in the Connect console
+2. Set locale speech model to **Speech-to-Speech: Amazon Nova Sonic**
+3. The bot uses Bedrock's bidirectional streaming internally
+4. Requires `bedrock:InvokeModel` IAM permission on the Connect service role
+5. Only available in us-east-1 and us-west-2
 
 ---
 

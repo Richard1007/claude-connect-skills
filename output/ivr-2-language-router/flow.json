@@ -1,0 +1,336 @@
+{
+  "Version": "2019-10-30",
+  "StartAction": "8ced33f2-d2ab-4e8e-bf70-8e45455d5882",
+  "Metadata": {
+    "entryPointPosition": { "x": 39, "y": 40 },
+    "ActionMetadata": {
+      "8ced33f2-d2ab-4e8e-bf70-8e45455d5882": { "position": { "x": 250, "y": 40 } },
+      "ff2a23ac-4341-47c4-846b-38db54497b6f": { "position": { "x": 500, "y": 40 } },
+      "1ae9ff64-99c6-403b-839c-e9e463ed0e02": { "position": { "x": 750, "y": 40 } },
+      "8f2b72fc-f8d0-4c4c-9566-a79f8ad7c1f4": { "position": { "x": 1000, "y": 40 } },
+      "e6ebe01d-c0cf-4c29-a101-313de6c66686": { "position": { "x": 1000, "y": -150 } },
+      "fb70c120-5def-401a-97c6-974363e116f1": { "position": { "x": 1000, "y": 200 } },
+      "224c0b33-b3f7-4f12-b068-aa46fb446a82": { "position": { "x": 1250, "y": 40 } },
+      "d87ddc6f-c940-49e0-8f18-981153a5f142": { "position": { "x": 1500, "y": -150 } },
+      "a020f132-afbd-48d1-9006-af295a58adff": { "position": { "x": 1500, "y": 40 } },
+      "bb0328e9-dde3-4188-95c4-5ce93d7c1538": { "position": { "x": 1500, "y": 200 } },
+      "1219c3f2-ffdb-4ae5-a6da-5e36c13027e4": { "position": { "x": 1750, "y": 40 } },
+      "2471c113-b8e2-44ce-a218-e7b984e246a7": { "position": { "x": 750, "y": 300 } },
+      "c2d4691e-7ee2-4f3b-b25f-aafe98cb0f8e": { "position": { "x": 1000, "y": 300 } },
+      "a7526c76-9da1-40ca-b876-0d0be2bf8847": { "position": { "x": 1250, "y": 300 } },
+      "2307c306-56c0-499a-b33a-4f1a46d1a236": { "position": { "x": 1500, "y": 300 } },
+      "5b62f4a0-5caa-41ce-80ff-3f00bb296a44": { "position": { "x": 750, "y": 500 } },
+      "36d9686e-e6ef-4bff-b75e-7135d8e09a9e": { "position": { "x": 1000, "y": 500 } }
+    }
+  },
+  "Actions": [
+    {
+      "Identifier": "8ced33f2-d2ab-4e8e-bf70-8e45455d5882",
+      "Type": "UpdateContactTextToSpeechVoice",
+      "Parameters": {
+        "TextToSpeechEngine": "Neural",
+        "TextToSpeechStyle": "None",
+        "TextToSpeechVoice": "Joanna"
+      },
+      "Transitions": {
+        "NextAction": "ff2a23ac-4341-47c4-846b-38db54497b6f",
+        "Errors": [
+          { "ErrorType": "NoMatchingError", "NextAction": "1219c3f2-ffdb-4ae5-a6da-5e36c13027e4" }
+        ]
+      }
+    },
+    {
+      "Identifier": "ff2a23ac-4341-47c4-846b-38db54497b6f",
+      "Type": "UpdateContactAttributes",
+      "Parameters": {
+        "Attributes": {
+          "retryCount": "0",
+          "language": "none"
+        },
+        "TargetContact": "Current"
+      },
+      "Transitions": {
+        "NextAction": "1ae9ff64-99c6-403b-839c-e9e463ed0e02",
+        "Errors": [
+          { "ErrorType": "NoMatchingError", "NextAction": "1219c3f2-ffdb-4ae5-a6da-5e36c13027e4" }
+        ]
+      }
+    },
+    {
+      "Identifier": "1ae9ff64-99c6-403b-839c-e9e463ed0e02",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "Welcome to the language selection system."
+      },
+      "Transitions": {
+        "NextAction": "8f2b72fc-f8d0-4c4c-9566-a79f8ad7c1f4",
+        "Errors": [
+          { "ErrorType": "NoMatchingError", "NextAction": "1219c3f2-ffdb-4ae5-a6da-5e36c13027e4" }
+        ],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "8f2b72fc-f8d0-4c4c-9566-a79f8ad7c1f4",
+      "Type": "GetParticipantInput",
+      "Parameters": {
+        "Text": "Press 1 for English, press 2 for Spanish, or press 3 for French.",
+        "StoreInput": "False",
+        "InputTimeLimitSeconds": "5"
+      },
+      "Transitions": {
+        "NextAction": "2471c113-b8e2-44ce-a218-e7b984e246a7",
+        "Conditions": [
+          {
+            "NextAction": "e6ebe01d-c0cf-4c29-a101-313de6c66686",
+            "Condition": { "Operator": "Equals", "Operands": ["1"] }
+          },
+          {
+            "NextAction": "3608e4eb-340e-4328-8c5f-a21e7db8a007",
+            "Condition": { "Operator": "Equals", "Operands": ["2"] }
+          },
+          {
+            "NextAction": "fb70c120-5def-401a-97c6-974363e116f1",
+            "Condition": { "Operator": "Equals", "Operands": ["3"] }
+          }
+        ],
+        "Errors": [
+          { "ErrorType": "InputTimeLimitExceeded", "NextAction": "5b62f4a0-5caa-41ce-80ff-3f00bb296a44" },
+          { "ErrorType": "NoMatchingCondition", "NextAction": "2471c113-b8e2-44ce-a218-e7b984e246a7" },
+          { "ErrorType": "NoMatchingError", "NextAction": "1219c3f2-ffdb-4ae5-a6da-5e36c13027e4" }
+        ]
+      }
+    },
+    {
+      "Identifier": "e6ebe01d-c0cf-4c29-a101-313de6c66686",
+      "Type": "UpdateContactAttributes",
+      "Parameters": {
+        "Attributes": {
+          "language": "en"
+        },
+        "TargetContact": "Current"
+      },
+      "Transitions": {
+        "NextAction": "224c0b33-b3f7-4f12-b068-aa46fb446a82",
+        "Errors": [
+          { "ErrorType": "NoMatchingError", "NextAction": "1219c3f2-ffdb-4ae5-a6da-5e36c13027e4" }
+        ]
+      }
+    },
+    {
+      "Identifier": "3608e4eb-340e-4328-8c5f-a21e7db8a007",
+      "Type": "UpdateContactAttributes",
+      "Parameters": {
+        "Attributes": {
+          "language": "es"
+        },
+        "TargetContact": "Current"
+      },
+      "Transitions": {
+        "NextAction": "224c0b33-b3f7-4f12-b068-aa46fb446a82",
+        "Errors": [
+          { "ErrorType": "NoMatchingError", "NextAction": "1219c3f2-ffdb-4ae5-a6da-5e36c13027e4" }
+        ]
+      }
+    },
+    {
+      "Identifier": "fb70c120-5def-401a-97c6-974363e116f1",
+      "Type": "UpdateContactAttributes",
+      "Parameters": {
+        "Attributes": {
+          "language": "fr"
+        },
+        "TargetContact": "Current"
+      },
+      "Transitions": {
+        "NextAction": "224c0b33-b3f7-4f12-b068-aa46fb446a82",
+        "Errors": [
+          { "ErrorType": "NoMatchingError", "NextAction": "1219c3f2-ffdb-4ae5-a6da-5e36c13027e4" }
+        ]
+      }
+    },
+    {
+      "Identifier": "224c0b33-b3f7-4f12-b068-aa46fb446a82",
+      "Type": "Compare",
+      "Parameters": {
+        "ComparisonValue": "$.Attributes.language"
+      },
+      "Transitions": {
+        "NextAction": "1219c3f2-ffdb-4ae5-a6da-5e36c13027e4",
+        "Conditions": [
+          {
+            "NextAction": "d87ddc6f-c940-49e0-8f18-981153a5f142",
+            "Condition": { "Operator": "Equals", "Operands": ["en"] }
+          },
+          {
+            "NextAction": "a020f132-afbd-48d1-9006-af295a58adff",
+            "Condition": { "Operator": "Equals", "Operands": ["es"] }
+          },
+          {
+            "NextAction": "bb0328e9-dde3-4188-95c4-5ce93d7c1538",
+            "Condition": { "Operator": "Equals", "Operands": ["fr"] }
+          }
+        ],
+        "Errors": [
+          { "ErrorType": "NoMatchingCondition", "NextAction": "1219c3f2-ffdb-4ae5-a6da-5e36c13027e4" }
+        ]
+      }
+    },
+    {
+      "Identifier": "d87ddc6f-c940-49e0-8f18-981153a5f142",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "You selected English. Your language preference has been saved. Thank you for calling."
+      },
+      "Transitions": {
+        "NextAction": "1219c3f2-ffdb-4ae5-a6da-5e36c13027e4",
+        "Errors": [
+          { "ErrorType": "NoMatchingError", "NextAction": "1219c3f2-ffdb-4ae5-a6da-5e36c13027e4" }
+        ],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "a020f132-afbd-48d1-9006-af295a58adff",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "You selected Spanish. Your language preference has been saved. Thank you for calling."
+      },
+      "Transitions": {
+        "NextAction": "1219c3f2-ffdb-4ae5-a6da-5e36c13027e4",
+        "Errors": [
+          { "ErrorType": "NoMatchingError", "NextAction": "1219c3f2-ffdb-4ae5-a6da-5e36c13027e4" }
+        ],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "bb0328e9-dde3-4188-95c4-5ce93d7c1538",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "You selected French. Your language preference has been saved. Thank you for calling."
+      },
+      "Transitions": {
+        "NextAction": "1219c3f2-ffdb-4ae5-a6da-5e36c13027e4",
+        "Errors": [
+          { "ErrorType": "NoMatchingError", "NextAction": "1219c3f2-ffdb-4ae5-a6da-5e36c13027e4" }
+        ],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "2471c113-b8e2-44ce-a218-e7b984e246a7",
+      "Type": "UpdateContactAttributes",
+      "Parameters": {
+        "Attributes": {
+          "retryCount": "1"
+        },
+        "TargetContact": "Current"
+      },
+      "Transitions": {
+        "NextAction": "c2d4691e-7ee2-4f3b-b25f-aafe98cb0f8e",
+        "Errors": [
+          { "ErrorType": "NoMatchingError", "NextAction": "1219c3f2-ffdb-4ae5-a6da-5e36c13027e4" }
+        ]
+      }
+    },
+    {
+      "Identifier": "c2d4691e-7ee2-4f3b-b25f-aafe98cb0f8e",
+      "Type": "Compare",
+      "Parameters": {
+        "ComparisonValue": "$.Attributes.retryCount"
+      },
+      "Transitions": {
+        "NextAction": "36d9686e-e6ef-4bff-b75e-7135d8e09a9e",
+        "Conditions": [
+          {
+            "NextAction": "a7526c76-9da1-40ca-b876-0d0be2bf8847",
+            "Condition": { "Operator": "Equals", "Operands": ["1"] }
+          }
+        ],
+        "Errors": [
+          { "ErrorType": "NoMatchingCondition", "NextAction": "36d9686e-e6ef-4bff-b75e-7135d8e09a9e" }
+        ]
+      }
+    },
+    {
+      "Identifier": "a7526c76-9da1-40ca-b876-0d0be2bf8847",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "Sorry, that was not a valid selection. Please try again."
+      },
+      "Transitions": {
+        "NextAction": "2307c306-56c0-499a-b33a-4f1a46d1a236",
+        "Errors": [
+          { "ErrorType": "NoMatchingError", "NextAction": "1219c3f2-ffdb-4ae5-a6da-5e36c13027e4" }
+        ],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "2307c306-56c0-499a-b33a-4f1a46d1a236",
+      "Type": "GetParticipantInput",
+      "Parameters": {
+        "Text": "Press 1 for English, press 2 for Spanish, or press 3 for French.",
+        "StoreInput": "False",
+        "InputTimeLimitSeconds": "5"
+      },
+      "Transitions": {
+        "NextAction": "36d9686e-e6ef-4bff-b75e-7135d8e09a9e",
+        "Conditions": [
+          {
+            "NextAction": "e6ebe01d-c0cf-4c29-a101-313de6c66686",
+            "Condition": { "Operator": "Equals", "Operands": ["1"] }
+          },
+          {
+            "NextAction": "3608e4eb-340e-4328-8c5f-a21e7db8a007",
+            "Condition": { "Operator": "Equals", "Operands": ["2"] }
+          },
+          {
+            "NextAction": "fb70c120-5def-401a-97c6-974363e116f1",
+            "Condition": { "Operator": "Equals", "Operands": ["3"] }
+          }
+        ],
+        "Errors": [
+          { "ErrorType": "InputTimeLimitExceeded", "NextAction": "36d9686e-e6ef-4bff-b75e-7135d8e09a9e" },
+          { "ErrorType": "NoMatchingCondition", "NextAction": "36d9686e-e6ef-4bff-b75e-7135d8e09a9e" },
+          { "ErrorType": "NoMatchingError", "NextAction": "1219c3f2-ffdb-4ae5-a6da-5e36c13027e4" }
+        ]
+      }
+    },
+    {
+      "Identifier": "36d9686e-e6ef-4bff-b75e-7135d8e09a9e",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "We were unable to process your selection. Goodbye."
+      },
+      "Transitions": {
+        "NextAction": "1219c3f2-ffdb-4ae5-a6da-5e36c13027e4",
+        "Errors": [
+          { "ErrorType": "NoMatchingError", "NextAction": "1219c3f2-ffdb-4ae5-a6da-5e36c13027e4" }
+        ],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "5b62f4a0-5caa-41ce-80ff-3f00bb296a44",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "We did not receive any input. Goodbye."
+      },
+      "Transitions": {
+        "NextAction": "1219c3f2-ffdb-4ae5-a6da-5e36c13027e4",
+        "Errors": [
+          { "ErrorType": "NoMatchingError", "NextAction": "1219c3f2-ffdb-4ae5-a6da-5e36c13027e4" }
+        ],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "1219c3f2-ffdb-4ae5-a6da-5e36c13027e4",
+      "Type": "DisconnectParticipant",
+      "Parameters": {},
+      "Transitions": {}
+    }
+  ]
+}

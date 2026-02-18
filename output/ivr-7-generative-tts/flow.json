@@ -1,0 +1,44 @@
+{
+  "Version": "2019-10-30",
+  "StartAction": "a1",
+  "Metadata": {
+    "entryPointPosition": { "x": 39, "y": 40 },
+    "ActionMetadata": {
+      "a1": { "position": { "x": 250, "y": 40 } },
+      "a2": { "position": { "x": 500, "y": 40 } },
+      "a3": { "position": { "x": 750, "y": 40 } }
+    }
+  },
+  "Actions": [
+    {
+      "Identifier": "a1",
+      "Type": "UpdateContactTextToSpeechVoice",
+      "Parameters": {
+        "TextToSpeechEngine": "Generative",
+        "TextToSpeechStyle": "None",
+        "TextToSpeechVoice": "Matthew"
+      },
+      "Transitions": {
+        "NextAction": "a2",
+        "Errors": [{ "ErrorType": "NoMatchingError", "NextAction": "a3" }]
+      }
+    },
+    {
+      "Identifier": "a2",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "Hello. This is a test of generative text to speech. How does it sound?"
+      },
+      "Transitions": {
+        "NextAction": "a3",
+        "Errors": [{ "ErrorType": "NoMatchingError", "NextAction": "a3" }]
+      }
+    },
+    {
+      "Identifier": "a3",
+      "Type": "DisconnectParticipant",
+      "Parameters": {},
+      "Transitions": {}
+    }
+  ]
+}

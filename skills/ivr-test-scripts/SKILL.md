@@ -62,6 +62,251 @@ If the user has already provided the flow JSON or references an existing deploye
 5. **Exact system prompts** — `System:` lines quote the exact TTS text from the flow JSON.
 6. **Test conditions** — Each scenario states when it can be tested (e.g., Mon-Fri, Sat-Sun).
 
+## AWS Native Test API Integration
+
+These rules govern how to create **programmatic automated tests** using the AWS Connect Native Test API (`CreateTestCase`, `StartTestCaseExecution`). Manual test scripts follow different rules.
+
+### Working Test Content Schema (Version 2019-10-30)
+
+```json
+{
+  "Version": "2019-10-30",
+  "Metadata": {},
+  "Observations": [
+    {
+      "Identifier": "unique-uuid",
+      "Event": {
+        "Identifier": "event-uuid",
+        "Type": "TestInitiated | MessageReceived | FlowActionStarted | TestCompleted",
+        "Actor": "System",
+        "Properties": { "Text": "partial text to match" },
+        "MatchingCriteria": "Inclusion"
+      },
+      "Actions": [
+        {
+          "Identifier": "action-uuid",
+          "Type": "SendInstruction | TestControl",
+          "Actor": "Customer",
+          "Parameters": {
+            "DtmfInput": { "Type": "DtmfInput", "Properties": { "Value": 1 } }
+          }
+        }
+      ],
+      "Transitions": { "NextObservations": ["next-obs-uuid"] }
+    }
+  ]
+}
+```
+
+### Critical Validation Rules
+
+1. **Version MUST be `"2019-10-30"`** — Not `"2025-06-21"` or any other version
+2. **Do NOT include `Usage` field** — Rejected by validation
+3. **Do NOT include `Transitions` inside Actions** — Only observations have transitions
+4. **DTMF Value must be a number** — `{ "Value": 1 }` not `{ "Value": "1" }`
+5. **FlowActionStarted events CANNOT have Actions** — Use `MessageReceived` events for caller actions
+6. **Use `Status: 'PUBLISHED'` for validation** — `Status: 'SAVED'` accepts anything but won't execute
+7. **`Content` parameter is a JSON string** — Stringify the test JSON before passing to `CreateTestCase`
+
+### Message Concatenation Rule
+
+**CRITICAL:** Consecutive TTS-producing flow actions are concatenated into a SINGLE `MessageReceived` event:
+
+| Flow Sequence | Test API Event Count |
+|--------------|---------------------|
+| `MessageParticipant("A") → GetParticipantInput("B")` | ONE event: `"A. B"` |
+| `MessageParticipant("A") → MessageParticipant("B") → GetParticipantInput("C")` | ONE event: `"A. B. C"` |
+| `GetParticipantInput("A")` → (DTMF) → `MessageParticipant("B")` | TWO events: `"A"` then `"B"` |
+| `GetParticipantInput("A")` → (DTMF) → `MessageParticipant("B") → GetParticipantInput("C")` | TWO events: `"A"` then `"B. C"` |
+
+**Rule:** Events are split when a DTMF/input action occurs. Everything before input = one event. Everything after input until next input = next event.
+
+**Impact:** When creating test observations, group consecutive prompts into ONE `MessageReceived` event. Use `MatchingCriteria: "Inclusion"` to match partial text.
+
+### Standard Observation Structure
+
+```json
+{
+  "Identifier": "obs-1",
+  "Event": {
+    "Identifier": "evt-1",
+    "Type": "TestInitiated",
+    "Actor": "System"
+  },
+  "Actions": [],
+  "Transitions": { "NextObservations": ["obs-2"] }
+},
+{
+  "Identifier": "obs-2",
+  "Event": {
+    "Identifier": "evt-2",
+    "Type": "MessageReceived",
+    "Actor": "System",
+    "Properties": { "Text": "Welcome to our service" },
+    "MatchingCriteria": "Inclusion"
+  },
+  "Actions": [
+    {
+      "Identifier": "act-1",
+      "Type": "SendInstruction",
+      "Actor": "Customer",
+      "Parameters": {
+        "DtmfInput": { "Type": "DtmfInput", "Properties": { "Value": 1 } }
+      }
+    }
+  ],
+  "Transitions": { "NextObservations": ["obs-3"] }
+}
+```
+
+### Known Limitation: Self-Loop GetParticipantInput Is Untestable
+
+**Issue:** When a `GetParticipantInput` block loops back to itself (e.g., "press 3 to repeat menu"), the test API does NOT emit a new `MessageReceived` event for the re-played prompt. Tests hang indefinitely at `IN_PROGRESS`.
+
+**Evidence:** Scenario S3 (Press 3 → Repeat → Press 1 → Sales) stuck at 2/2 observations. After sending DTMF 3, the "repeated-menu" observation never matched.
+
+**Impact:** You CANNOT test self-loop paths programmatically. Document this in the test scripts as "Manual testing only — self-loop limitation."
+
+**Fix:** IVR flows should route repeat paths through an intermediate `MessageParticipant` block. See `amazon-connect-ivr` skill, AWS Native Test API Compatibility Rules.
+
+### Test Execution Commands
+
+```bash
+# Create test case (Content is stringified JSON)
+aws connect create-test-case \
+  --instance-id <INSTANCE_ID> \
+  --contact-flow-id <FLOW_ID> \
+  --name "S1: Happy Path - Sales" \
+  --description "Press 1 to reach sales queue" \
+  --status PUBLISHED \
+  --content "$(cat test-case.json | jq -c .)" \
+  --profile <PROFILE>
+
+# Start execution
+aws connect start-test-case-execution \
+  --instance-id <INSTANCE_ID> \
+  --test-case-id <TEST_CASE_ID> \
+  --profile <PROFILE>
+
+# Poll execution status
+aws connect get-test-case-execution \
+  --instance-id <INSTANCE_ID> \
+  --test-case-execution-id <EXECUTION_ID> \
+  --profile <PROFILE> \
+  --query 'TestCaseExecution.Status'
+
+# Get detailed results
+aws connect get-test-case-execution \
+  --instance-id <INSTANCE_ID> \
+  --test-case-execution-id <EXECUTION_ID> \
+  --profile <PROFILE>
+```
+
+### Error Path Event Structure (IVR #2 Finding)
+
+When `GetParticipantInput` triggers `NoMatchingCondition` and the path goes through silent blocks before reaching a new `MessageParticipant` + `GetParticipantInput`, expect **MULTIPLE separate `MessageReceived` events**, not one concatenated event.
+
+**Pattern:**
+```
+GetParticipantInput("Press 1 for English") 
+  → (invalid DTMF sent)
+  → UpdateContactAttributes(retryCount++)  [silent block]
+  → Compare(retryCount < 3)  [silent block]
+  → MessageParticipant("Sorry, invalid selection")
+  → GetParticipantInput("Please try again. Press 1 for English")
+```
+
+**Test API Observations:**
+1. **Event 1 (MessageReceived):** `"Press 1 for English. Sorry, invalid selection."` (concatenated — error message appended to original prompt)
+2. **Event 2 (MessageReceived):** `"Please try again. Press 1 for English."` (separate event after silent blocks)
+
+**Correct Observation Pattern for Retry Flows:**
+```json
+{
+  "Identifier": "obs-welcome-menu",
+  "Event": { "Type": "MessageReceived", "Properties": { "Text": "Press 1 for English" } },
+  "Actions": [{ "Type": "SendInstruction", "Parameters": { "DtmfInput": { "Value": 9 } } }],
+  "Transitions": { "NextObservations": ["obs-error-msg"] }
+},
+{
+  "Identifier": "obs-error-msg",
+  "Event": { "Type": "MessageReceived", "Properties": { "Text": "Sorry, invalid selection" }, "MatchingCriteria": "Inclusion" },
+  "Actions": [],
+  "Transitions": { "NextObservations": ["obs-retry-menu"] }
+},
+{
+  "Identifier": "obs-retry-menu",
+  "Event": { "Type": "MessageReceived", "Properties": { "Text": "Please try again" }, "MatchingCriteria": "Inclusion" },
+  "Actions": [{ "Type": "SendInstruction", "Parameters": { "DtmfInput": { "Value": 1 } } }],
+  "Transitions": { "NextObservations": ["obs-result"] }
+}
+```
+
+### Lex Bot Testing **(IVR #3 Finding)**
+**DTMF input through `ConnectParticipantWithLexBot` works correctly in tests.** The test API sends DTMF which Lex maps to intents. However, the Lex block's prompt text is NOT observable — only match the `MessageParticipant` greeting before the Lex block, then match the response message after intent routing.
+
+**Case Normalization:** Neural TTS normalizes case in test observation text. "Connecting you..." may appear as "connecting you..." in actual test results. Use `Inclusion` matching with lowercase-safe text fragments to avoid case-sensitivity issues.
+
+### Silent Blocks Don't Produce Observable Events **(IVR #4 Finding)**
+**Issue:** Non-TTS blocks (`UpdateContactTargetQueue`, `CheckHoursOfOperation`, `InvokeLambdaFunction`) are processed silently and do NOT generate `MessageReceived` events in the test API.
+
+**Fix:** Only the subsequent `MessageParticipant` block generates an observable event. Same concatenation boundary rules apply as `UpdateContactAttributes` and `Compare`. Silent blocks create event boundaries.
+
+### Lambda-Interpolated Messages Are Observable **(IVR #4 Finding)**
+**Issue:** When `MessageParticipant` uses `$.External.*` references to interpolate Lambda return values, the test API must resolve them.
+
+**Fix:** The test API resolves interpolated text and includes the actual resolved text in `MessageReceived` events. Use `Inclusion` matching with partial text since full interpolated strings may be long or variable.
+
+### CheckHoursOfOperation Evaluates Real-Time in Tests **(IVR #4 Finding)**
+**Issue:** The test API checks actual hours of operation against the queue's configured hours.
+
+**Fix:** Design test flows with queues whose hours match your expected test outcome. Use a 24/7 queue for "open" path testing, restricted-hours queue for "closed" path testing. Hours are evaluated in real-time during test execution.
+
+### TransferContactToQueue Produces No Observable Event **(IVR #4 Finding)**
+**Issue:** The `TransferContactToQueue` block does not generate a `MessageReceived` event in the test API.
+
+**Fix:** End test observations after the pre-transfer message. Use `TestCompleted` event after the final message before transfer. The transfer itself is not observable in test results.
+
+### TransferToFlow Continues Test Observation Across Flows **(IVR #5 Finding)**
+**Issue:** The test engine follows execution from the main flow into the transferred flow.
+
+**Fix:** Sub-flow `MessageParticipant` events are observable. This enables testing multi-flow architectures end-to-end.
+
+### DistributeByPercentage Is Non-Deterministic in Tests **(IVR #5 Finding)**
+**Issue:** Cannot write deterministic tests for percentage routing.
+
+**Fix:** To test specific branches, temporarily set 100% to the target branch, test, then restore original percentages.
+
+### UpdateContactRecordingBehavior and DistributeByPercentage Are Silent Blocks **(IVR #5 Finding)**
+**Issue:** Neither produces observable events nor creates event boundaries.
+
+**Fix:** These blocks are processed silently. Only subsequent TTS blocks generate observable `MessageReceived` events.
+
+### When Observations Don't Match Actual Branch, Text Concatenates Into Previous Observation **(IVR #5 Finding)**
+**Issue:** If the flow takes an unexpected branch, the mismatched message text gets absorbed into the preceding observation's actual text.
+
+**Fix:** Verify flow logic matches test expectations. Use `Inclusion` matching to handle unexpected concatenation gracefully.
+
+### UpdateContactRoutingBehavior and UpdateContactEventHooks Are Silent Blocks **(IVR #6 Finding)**
+**Issue:** Neither `UpdateContactRoutingBehavior` nor `UpdateContactEventHooks` produces observable events in the test API. Priority changes and event hook assignments happen silently.
+
+**Fix:** These blocks are processed silently. Only subsequent TTS blocks generate observable `MessageReceived` events. Same concatenation boundary rules apply as other silent blocks.
+
+### Generative TTS Is Observable Like Neural TTS **(IVR #7 Finding)**
+**Issue:** `TextToSpeechEngine: "Generative"` (Polly Generative, NOT Nova Sonic) produces the same `MessageReceived` events as Neural/Standard engines in tests.
+
+**Fix:** No special handling needed. The test API treats Generative TTS identically to Neural. Text content is observable via `Inclusion` matching. Voice name is not included in observations.
+
+### CreateWisdomSession Is a Silent Block **(IVR #8 Finding)**
+**Issue:** `CreateWisdomSession` does not produce observable events in the test API. The Q Connect session is created silently.
+
+**Fix:** Only subsequent `MessageParticipant` blocks produce observable events. If the flow is `Welcome → CreateWisdomSession → Success Message`, you'll see TWO separate observations (Welcome, then Success) with no event for CreateWisdomSession itself. Same event boundary rules as other silent blocks.
+
+### Test API Rejects Empty Text in Observations **(IVR #8 Finding)**
+**Issue:** Test cases with `Properties: { Text: "" }` are rejected with `InvalidTestCaseException: InvalidEventProblem — At least one of PromptId, Text, or SSML must be present`.
+
+**Fix:** Every `MessageReceived` observation MUST have non-empty `Text`. Use a keyword fragment with `MatchingCriteria: "Inclusion"` to match broadly without specifying full text.
+
 ## What To Do
 
 - **Parse the flow JSON first** — Walk the entire flow graph from `StartAction` to every terminal node.

@@ -1,0 +1,97 @@
+{
+  "Version": "2019-10-30",
+  "StartAction": "set-voice",
+  "Metadata": {
+    "entryPointPosition": { "x": 39, "y": 40 },
+    "ActionMetadata": {
+      "set-voice": { "position": { "x": 250, "y": 40 } },
+      "welcome-msg": { "position": { "x": 500, "y": 40 } },
+      "create-wisdom": { "position": { "x": 750, "y": 40 } },
+      "success-msg": { "position": { "x": 1000, "y": 40 } },
+      "error-msg": { "position": { "x": 1000, "y": 200 } },
+      "disconnect": { "position": { "x": 1250, "y": 40 } },
+      "disconnect-error": { "position": { "x": 1250, "y": 200 } }
+    }
+  },
+  "Actions": [
+    {
+      "Identifier": "set-voice",
+      "Type": "UpdateContactTextToSpeechVoice",
+      "Parameters": {
+        "TextToSpeechEngine": "Neural",
+        "TextToSpeechStyle": "None",
+        "TextToSpeechVoice": "Matthew"
+      },
+      "Transitions": {
+        "NextAction": "welcome-msg",
+        "Errors": [
+          { "NextAction": "welcome-msg", "ErrorType": "NoMatchingError" }
+        ]
+      }
+    },
+    {
+      "Identifier": "welcome-msg",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "Welcome to the Q in Connect test. We will now create a wisdom session."
+      },
+      "Transitions": {
+        "NextAction": "create-wisdom",
+        "Errors": [
+          { "NextAction": "create-wisdom", "ErrorType": "NoMatchingError" }
+        ]
+      }
+    },
+    {
+      "Identifier": "create-wisdom",
+      "Type": "CreateWisdomSession",
+      "Parameters": {
+        "WisdomAssistantArn": "arn:aws:wisdom:us-west-2:988066449281:assistant/6eacb18c-c838-484c-9d6a-c9df4d3d6c4c"
+      },
+      "Transitions": {
+        "NextAction": "success-msg",
+        "Errors": [
+          { "NextAction": "error-msg", "ErrorType": "NoMatchingError" }
+        ]
+      }
+    },
+    {
+      "Identifier": "success-msg",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "The wisdom session was created successfully. Q in Connect is now active for this call. Thank you for testing."
+      },
+      "Transitions": {
+        "NextAction": "disconnect",
+        "Errors": [
+          { "NextAction": "disconnect", "ErrorType": "NoMatchingError" }
+        ]
+      }
+    },
+    {
+      "Identifier": "error-msg",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "Sorry, we could not create the wisdom session. An error occurred. Goodbye."
+      },
+      "Transitions": {
+        "NextAction": "disconnect-error",
+        "Errors": [
+          { "NextAction": "disconnect-error", "ErrorType": "NoMatchingError" }
+        ]
+      }
+    },
+    {
+      "Identifier": "disconnect",
+      "Type": "DisconnectParticipant",
+      "Parameters": {},
+      "Transitions": {}
+    },
+    {
+      "Identifier": "disconnect-error",
+      "Type": "DisconnectParticipant",
+      "Parameters": {},
+      "Transitions": {}
+    }
+  ]
+}

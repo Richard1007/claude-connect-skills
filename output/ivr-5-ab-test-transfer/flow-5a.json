@@ -1,0 +1,133 @@
+{
+  "Version": "2019-10-30",
+  "StartAction": "c5000001-0001-0001-0001-000000000001",
+  "Metadata": {
+    "entryPointPosition": { "x": 39, "y": 40 },
+    "ActionMetadata": {
+      "c5000001-0001-0001-0001-000000000001": { "position": { "x": 250, "y": 40 } },
+      "c5000002-0002-0002-0002-000000000002": { "position": { "x": 500, "y": 40 } },
+      "c5000003-0003-0003-0003-000000000003": { "position": { "x": 750, "y": 40 } },
+      "c5000004-0004-0004-0004-000000000004": { "position": { "x": 1000, "y": 40 } },
+      "c5000005-0005-0005-0005-000000000005": { "position": { "x": 1250, "y": -100 } },
+      "c5000006-0006-0006-0006-000000000006": { "position": { "x": 1250, "y": 200 } },
+      "c5000007-0007-0007-0007-000000000007": { "position": { "x": 1500, "y": -100 } },
+      "c5000008-0008-0008-0008-000000000008": { "position": { "x": 1500, "y": 200 } },
+      "c5000009-0009-0009-0009-000000000009": { "position": { "x": 1750, "y": 40 } }
+    }
+  },
+  "Actions": [
+    {
+      "Identifier": "c5000001-0001-0001-0001-000000000001",
+      "Type": "UpdateContactTextToSpeechVoice",
+      "Parameters": {
+        "TextToSpeechEngine": "Neural",
+        "TextToSpeechStyle": "None",
+        "TextToSpeechVoice": "Joanna"
+      },
+      "Transitions": {
+        "NextAction": "c5000002-0002-0002-0002-000000000002",
+        "Errors": [
+          { "ErrorType": "NoMatchingError", "NextAction": "c5000009-0009-0009-0009-000000000009" }
+        ]
+      }
+    },
+    {
+      "Identifier": "c5000002-0002-0002-0002-000000000002",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "Welcome to the A B testing flow."
+      },
+      "Transitions": {
+        "NextAction": "c5000003-0003-0003-0003-000000000003",
+        "Errors": [
+          { "ErrorType": "NoMatchingError", "NextAction": "c5000009-0009-0009-0009-000000000009" }
+        ],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "c5000003-0003-0003-0003-000000000003",
+      "Type": "UpdateContactRecordingBehavior",
+      "Parameters": {
+        "RecordingBehavior": {
+          "RecordedParticipants": ["Agent"]
+        }
+      },
+      "Transitions": {
+        "NextAction": "c5000004-0004-0004-0004-000000000004",
+        "Errors": [],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "c5000004-0004-0004-0004-000000000004",
+      "Type": "DistributeByPercentage",
+      "Parameters": {},
+      "Transitions": {
+        "NextAction": "c5000006-0006-0006-0006-000000000006",
+        "Conditions": [
+          {
+            "NextAction": "c5000005-0005-0005-0005-000000000005",
+            "Condition": { "Operator": "NumberLessThan", "Operands": ["100"] }
+          }
+        ],
+        "Errors": [
+          { "ErrorType": "NoMatchingCondition", "NextAction": "c5000006-0006-0006-0006-000000000006" }
+        ]
+      }
+    },
+    {
+      "Identifier": "c5000005-0005-0005-0005-000000000005",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "You have been selected for group A. You will now be transferred to a different flow."
+      },
+      "Transitions": {
+        "NextAction": "c5000007-0007-0007-0007-000000000007",
+        "Errors": [
+          { "ErrorType": "NoMatchingError", "NextAction": "c5000009-0009-0009-0009-000000000009" }
+        ],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "c5000006-0006-0006-0006-000000000006",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "You have been selected for group B. Thank you for calling. Goodbye."
+      },
+      "Transitions": {
+        "NextAction": "c5000008-0008-0008-0008-000000000008",
+        "Errors": [
+          { "ErrorType": "NoMatchingError", "NextAction": "c5000009-0009-0009-0009-000000000009" }
+        ],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "c5000007-0007-0007-0007-000000000007",
+      "Type": "TransferToFlow",
+      "Parameters": {
+        "ContactFlowId": "arn:aws:connect:us-west-2:988066449281:instance/7d261e94-17bc-4f3e-96f7-f9b7541ce479/contact-flow/4648ff34-03a6-4645-8784-e53ab2329036"
+      },
+      "Transitions": {
+        "NextAction": "c5000009-0009-0009-0009-000000000009",
+        "Errors": [
+          { "ErrorType": "NoMatchingError", "NextAction": "c5000009-0009-0009-0009-000000000009" }
+        ]
+      }
+    },
+    {
+      "Identifier": "c5000008-0008-0008-0008-000000000008",
+      "Type": "DisconnectParticipant",
+      "Parameters": {},
+      "Transitions": {}
+    },
+    {
+      "Identifier": "c5000009-0009-0009-0009-000000000009",
+      "Type": "DisconnectParticipant",
+      "Parameters": {},
+      "Transitions": {}
+    }
+  ]
+}

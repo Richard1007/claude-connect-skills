@@ -1,0 +1,213 @@
+{
+  "Version": "2019-10-30",
+  "StartAction": "4b892259-9c35-4711-925b-85ae925e6f6d",
+  "Metadata": {
+    "entryPointPosition": { "x": 39, "y": 40 },
+    "ActionMetadata": {
+      "4b892259-9c35-4711-925b-85ae925e6f6d": { "position": { "x": 250, "y": 200 } },
+      "a8cf9d2e-76a2-41ae-b5b9-1a6bdd3745ac": { "position": { "x": 550, "y": 200 } },
+      "36759f66-13f8-4cee-8439-0d29cbae12b8": { "position": { "x": 850, "y": 200 } },
+      "f7e8a9b0-c1d2-4e3f-a5b6-c7d8e9f0a1b2": { "position": { "x": 1150, "y": 200 } },
+      "73eb570f-eca8-487a-8e5c-62816e28b8af": { "position": { "x": 1450, "y": 200 } },
+      "c1a2b3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d": { "position": { "x": 1800, "y": 50 } },
+      "4848ad53-2f7a-4d05-82d0-9c301bf67b25": { "position": { "x": 1800, "y": 300 } },
+      "979dc9c9-2d1f-4918-be1e-ee619e0e0910": { "position": { "x": 2100, "y": 200 } },
+      "9e25f648-19d9-4e59-915d-175078103367": { "position": { "x": 2100, "y": 400 } },
+      "69597b2b-dceb-44b2-a6c4-c5de229f6f53": { "position": { "x": 2400, "y": 300 } },
+      "e771a441-e128-49e3-82d4-f4b2877d8ddc": { "position": { "x": 2100, "y": 600 } },
+      "df5eb6b6-cf11-4482-a504-d56e4f188190": { "position": { "x": 1800, "y": 500 } },
+      "b4dc5dc3-6cda-430d-9da8-847330e4312f": { "position": { "x": 2400, "y": 50 } }
+    }
+  },
+  "Actions": [
+    {
+      "Identifier": "4b892259-9c35-4711-925b-85ae925e6f6d",
+      "Type": "UpdateContactAttributes",
+      "Parameters": {
+        "Attributes": {
+          "retryCount": "0"
+        }
+      },
+      "Transitions": {
+        "NextAction": "a8cf9d2e-76a2-41ae-b5b9-1a6bdd3745ac",
+        "Errors": [
+          { "NextAction": "a8cf9d2e-76a2-41ae-b5b9-1a6bdd3745ac", "ErrorType": "NoMatchingError" }
+        ],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "a8cf9d2e-76a2-41ae-b5b9-1a6bdd3745ac",
+      "Type": "UpdateContactTextToSpeechVoice",
+      "Parameters": {
+        "TextToSpeechVoice": "Matthew",
+        "TextToSpeechEngine": "Generative",
+        "TextToSpeechStyle": "None"
+      },
+      "Transitions": {
+        "NextAction": "36759f66-13f8-4cee-8439-0d29cbae12b8",
+        "Errors": [
+          { "NextAction": "36759f66-13f8-4cee-8439-0d29cbae12b8", "ErrorType": "NoMatchingError" }
+        ]
+      }
+    },
+    {
+      "Identifier": "36759f66-13f8-4cee-8439-0d29cbae12b8",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "Welcome to NBA Talk, powered by Nova Sonic! I'm your basketball buddy and I'd love to chat hoops with you."
+      },
+      "Transitions": {
+        "NextAction": "f7e8a9b0-c1d2-4e3f-a5b6-c7d8e9f0a1b2",
+        "Errors": [],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "f7e8a9b0-c1d2-4e3f-a5b6-c7d8e9f0a1b2",
+      "Type": "CreateWisdomSession",
+      "Parameters": {
+        "WisdomAssistantArn": "arn:aws:wisdom:us-west-2:988066449281:assistant/6eacb18c-c838-484c-9d6a-c9df4d3d6c4c"
+      },
+      "Transitions": {
+        "NextAction": "73eb570f-eca8-487a-8e5c-62816e28b8af",
+        "Errors": [
+          { "NextAction": "df5eb6b6-cf11-4482-a504-d56e4f188190", "ErrorType": "NoMatchingError" }
+        ],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "73eb570f-eca8-487a-8e5c-62816e28b8af",
+      "Type": "ConnectParticipantWithLexBot",
+      "Parameters": {
+        "Text": "So tell me, what's your favorite NBA team?",
+        "LexV2Bot": {
+          "AliasArn": "arn:aws:lex:us-west-2:988066449281:bot-alias/RUWRVBOBT0/MTA31AEAWK"
+        }
+      },
+      "Transitions": {
+        "NextAction": "4848ad53-2f7a-4d05-82d0-9c301bf67b25",
+        "Conditions": [
+          {
+            "NextAction": "c1a2b3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+            "Condition": { "Operator": "Equals", "Operands": ["QinConnectIntent"] }
+          }
+        ],
+        "Errors": [
+          { "NextAction": "4848ad53-2f7a-4d05-82d0-9c301bf67b25", "ErrorType": "NoMatchingCondition" },
+          { "NextAction": "df5eb6b6-cf11-4482-a504-d56e4f188190", "ErrorType": "NoMatchingError" }
+        ]
+      }
+    },
+    {
+      "Identifier": "c1a2b3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "Thanks for chatting basketball with us! Enjoy the games. Goodbye!"
+      },
+      "Transitions": {
+        "NextAction": "b4dc5dc3-6cda-430d-9da8-847330e4312f",
+        "Errors": [],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "4848ad53-2f7a-4d05-82d0-9c301bf67b25",
+      "Type": "Compare",
+      "Parameters": {
+        "ComparisonValue": "$.Attributes.retryCount"
+      },
+      "Transitions": {
+        "NextAction": "e771a441-e128-49e3-82d4-f4b2877d8ddc",
+        "Conditions": [
+          {
+            "NextAction": "979dc9c9-2d1f-4918-be1e-ee619e0e0910",
+            "Condition": { "Operator": "Equals", "Operands": ["0"] }
+          },
+          {
+            "NextAction": "9e25f648-19d9-4e59-915d-175078103367",
+            "Condition": { "Operator": "Equals", "Operands": ["1"] }
+          }
+        ],
+        "Errors": [
+          { "NextAction": "e771a441-e128-49e3-82d4-f4b2877d8ddc", "ErrorType": "NoMatchingCondition" }
+        ]
+      }
+    },
+    {
+      "Identifier": "979dc9c9-2d1f-4918-be1e-ee619e0e0910",
+      "Type": "UpdateContactAttributes",
+      "Parameters": {
+        "Attributes": {
+          "retryCount": "1"
+        }
+      },
+      "Transitions": {
+        "NextAction": "69597b2b-dceb-44b2-a6c4-c5de229f6f53",
+        "Errors": [
+          { "NextAction": "69597b2b-dceb-44b2-a6c4-c5de229f6f53", "ErrorType": "NoMatchingError" }
+        ],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "9e25f648-19d9-4e59-915d-175078103367",
+      "Type": "UpdateContactAttributes",
+      "Parameters": {
+        "Attributes": {
+          "retryCount": "2"
+        }
+      },
+      "Transitions": {
+        "NextAction": "69597b2b-dceb-44b2-a6c4-c5de229f6f53",
+        "Errors": [
+          { "NextAction": "69597b2b-dceb-44b2-a6c4-c5de229f6f53", "ErrorType": "NoMatchingError" }
+        ],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "69597b2b-dceb-44b2-a6c4-c5de229f6f53",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "I didn't quite catch that. Just tell me about your favorite NBA team, player, or who you think is winning the championship this year!"
+      },
+      "Transitions": {
+        "NextAction": "73eb570f-eca8-487a-8e5c-62816e28b8af",
+        "Errors": [],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "e771a441-e128-49e3-82d4-f4b2877d8ddc",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "Looks like we're having trouble connecting. Call back anytime to talk basketball! Goodbye."
+      },
+      "Transitions": {
+        "NextAction": "b4dc5dc3-6cda-430d-9da8-847330e4312f",
+        "Errors": [],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "df5eb6b6-cf11-4482-a504-d56e4f188190",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "We're having a technical timeout right now. Call back later to talk basketball! Goodbye."
+      },
+      "Transitions": {
+        "NextAction": "b4dc5dc3-6cda-430d-9da8-847330e4312f",
+        "Errors": [],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "b4dc5dc3-6cda-430d-9da8-847330e4312f",
+      "Type": "DisconnectParticipant",
+      "Parameters": {},
+      "Transitions": {}
+    }
+  ]
+}

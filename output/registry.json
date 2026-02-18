@@ -1,0 +1,303 @@
+{
+  "version": "1.0",
+  "instance": {
+    "id": "7d261e94-17bc-4f3e-96f7-f9b7541ce479",
+    "name": "self-learning",
+    "region": "us-west-2",
+    "profile": "haohai",
+    "phone": "+18773814938"
+  },
+  "ivrs": [
+    {
+      "id": 1,
+      "name": "Self-Learning Test 1 - DTMF Menu",
+      "folder": "ivr-1-dtmf-menu",
+      "flowId": "c0ccad2d-f667-4e7f-83e8-283b0ee5fe48",
+      "components": [
+        "UpdateContactTextToSpeechVoice",
+        "MessageParticipant",
+        "GetParticipantInput",
+        "DisconnectParticipant"
+      ],
+      "files": {
+        "flow": "flow.json",
+        "testScripts": "test-scripts.md",
+        "testHarness": "test-harness.mjs"
+      },
+      "testResults": {
+        "total": 5,
+        "passed": 4,
+        "failed": 1,
+        "details": {
+          "S1-Welcome": "PASSED",
+          "S2-Press1-Sales": "PASSED",
+          "S3-InvalidInput-Retry": "FAILED (self-loop untestable)",
+          "S4-Press2-Support": "PASSED",
+          "S5-Press3-Billing": "PASSED"
+        }
+      },
+      "bugsFound": [
+        "DisconnectParticipant needs Transitions: {} not Transitions: { NextAction: ... }",
+        "GetParticipantInput needs Text parameter inline, not reference",
+        "UpdateContactTextToSpeechVoice needs Errors array",
+        "Curly apostrophes in TTS text break deployment"
+      ],
+      "status": "tested"
+    },
+    {
+      "id": 2,
+      "name": "Self-Learning Test 2 - Language Router",
+      "folder": "ivr-2-language-router",
+      "flowId": "a785ba68-aeb2-45c2-84d1-6fb2e300569a",
+      "components": [
+        "UpdateContactAttributes",
+        "Compare"
+      ],
+      "files": {
+        "flow": "flow.json",
+        "testScripts": "test-scripts.md",
+        "testHarness": "test-harness.mjs",
+        "testHarnessS4Fix": "test-harness-s4-fix.mjs"
+      },
+      "testResults": {
+        "total": 5,
+        "passed": 5,
+        "failed": 0,
+        "details": {
+          "S1-English": "PASSED",
+          "S2-Spanish": "PASSED",
+          "S3-French": "PASSED",
+          "S4-InvalidRetry": "PASSED (after fix)",
+          "S5-MaxRetries": "PASSED"
+        }
+      },
+      "bugsFound": [
+        "Loop type does not exist in Connect — use Compare + retryCount attribute pattern",
+        "Silent blocks (UpdateContactAttributes, Compare) create event boundaries",
+        "GetParticipantInput prompt text prepended to error messages in test events"
+      ],
+      "status": "tested"
+    },
+    {
+      "id": 3,
+      "name": "Self-Learning Test 3 - Lex Bot Integration",
+      "folder": "ivr-3-lex-bot",
+      "flowId": "78445c3d-3564-4773-bc02-0881fbc90bef",
+      "components": [
+        "ConnectParticipantWithLexBot"
+      ],
+      "lexBot": {
+        "name": "SelfLearningTest3Bot",
+        "botId": "GTXWRVOOML",
+        "aliasId": "VDBMHJHN3R",
+        "aliasArn": "arn:aws:lex:us-west-2:988066449281:bot-alias/GTXWRVOOML/VDBMHJHN3R",
+        "intents": ["SalesIntent(1)", "SupportIntent(2)", "BillingIntent(3)"]
+      },
+      "files": {
+        "flow": "flow.json",
+        "testHarness": "test-harness.mjs"
+      },
+      "testResults": {
+        "total": 3,
+        "passed": 3,
+        "failed": 0,
+        "details": {
+          "S1-SalesViaDTMF": "PASSED",
+          "S2-SupportViaDTMF": "PASSED",
+          "S3-BillingViaDTMF": "PASSED"
+        }
+      },
+      "bugsFound": [
+        "Lex block prompt text is NOT emitted as MessageReceived (consumed internally by Lex)",
+        "DTMF through Lex works perfectly in tests",
+        "Neural TTS normalizes case in test observations"
+      ],
+      "status": "tested"
+    },
+    {
+      "id": 4,
+      "name": "Self-Learning Test 4 - Business Hours Router",
+      "folder": "ivr-4-business-hours",
+      "flowId": "a2ef1da6-2140-4c29-8457-426045679aef",
+      "components": [
+        "CheckHoursOfOperation",
+        "InvokeLambdaFunction",
+        "UpdateContactTargetQueue",
+        "TransferContactToQueue"
+      ],
+      "lambda": {
+        "name": "self-learning-test-4-lookup",
+        "arn": "arn:aws:lambda:us-west-2:988066449281:function:self-learning-test-4-lookup"
+      },
+      "queues": {
+        "BasicQueue": "337d3528",
+        "ClosedQueue": "c0ea4d3e"
+      },
+      "hours": {
+        "BasicHours": "38dc843e (24/7)",
+        "ClosedHours": "b22a43c5 (Sun 3:00-3:01 AM ET)"
+      },
+      "files": {
+        "flow": "flow.json",
+        "testHarness": "test-harness.mjs"
+      },
+      "testResults": {
+        "total": 3,
+        "passed": 3,
+        "failed": 0,
+        "details": {
+          "S1-OpenHours-LambdaLookup": "PASSED",
+          "S2-ClosedHours": "PASSED",
+          "S3-TransferToQueue": "PASSED"
+        }
+      },
+      "bugsFound": [
+        "CheckHoursOfOperation uses empty Parameters, reads queue set by UpdateContactTargetQueue",
+        "Lambda $.External.* resolves in TTS",
+        "TransferContactToQueue has no observable event",
+        "CheckHoursOfOperation evaluates real-time in tests",
+        "InvokeLambdaFunction max timeout is 8 seconds"
+      ],
+      "status": "tested"
+    },
+    {
+      "id": 5,
+      "name": "Self-Learning Test 5 - A/B Test with Flow Transfer",
+      "folder": "ivr-5-ab-test-transfer",
+      "flowId": "72e3a877-ddab-441d-99be-987751e117a6",
+      "subFlowId": "4648ff34-03a6-4645-8784-e53ab2329036",
+      "components": [
+        "DistributeByPercentage",
+        "TransferToFlow",
+        "UpdateContactRecordingBehavior"
+      ],
+      "files": {
+        "flow5a": "flow-5a.json",
+        "flow5bSubflow": "flow-5b-subflow.json",
+        "testHarness5050": "test-harness-5050.mjs",
+        "testHarnessTransfer": "test-harness-transfer.mjs"
+      },
+      "testResults": {
+        "total": 4,
+        "passed": 2,
+        "failed": 0,
+        "timedOut": 2,
+        "details": {
+          "S1-GroupA-50pct": "TIMEOUT (non-deterministic %)",
+          "S2-GroupB": "PASSED",
+          "S3-GroupA-50pct": "TIMEOUT (non-deterministic %)",
+          "S4-TransferToFlow-100pct": "PASSED"
+        }
+      },
+      "bugsFound": [
+        "UpdateContactRecordingBehavior rejects NoMatchingError — must use Errors: []",
+        "TransferToFlow crosses flow boundaries in tests (sub-flow events observable)",
+        "DistributeByPercentage is non-deterministic — use 100% split for testing",
+        "When observations dont match actual branch, text concatenates into previous observation"
+      ],
+      "status": "tested"
+    },
+    {
+      "id": 6,
+      "name": "Self-Learning Test 6 - Deploy-Only (Routing + EventHooks)",
+      "folder": "ivr-6-deploy-only",
+      "flowId": null,
+      "components": [
+        "UpdateContactRoutingBehavior",
+        "UpdateContactEventHooks"
+      ],
+      "minimalFlows": {
+        "RoutingBehavior": "dcb5a7fd",
+        "EventHooks": "b8fadd51"
+      },
+      "files": {
+        "flow": "flow.json"
+      },
+      "testResults": {
+        "total": 0,
+        "passed": 0,
+        "failed": 0,
+        "details": {
+          "DeployRoutingBehavior": "DEPLOY OK",
+          "DeployEventHooks": "DEPLOY OK",
+          "DeployStoreInput": "DEPLOY FAILED"
+        }
+      },
+      "bugsFound": [
+        "UpdateContactRoutingBehavior rejects NoMatchingError — use Errors: []",
+        "GetParticipantInput with StoreInput=True rejects empty Conditions array"
+      ],
+      "status": "deploy-only"
+    },
+    {
+      "id": 7,
+      "name": "Self-Learning Test 7 - Generative TTS",
+      "folder": "ivr-7-generative-tts",
+      "flowId": "4570a2fe-9602-471c-8dfa-358681193b44",
+      "components": [
+        "UpdateContactTextToSpeechVoice (Generative engine)"
+      ],
+      "files": {
+        "flow": "flow.json",
+        "testHarness": "test-harness.mjs"
+      },
+      "testResults": {
+        "total": 2,
+        "passed": 2,
+        "failed": 0,
+        "details": {
+          "S1-GenerativeTTS": "PASSED"
+        }
+      },
+      "bugsFound": [],
+      "notes": "TextToSpeechEngine: 'Generative' = Polly Generative, NOT Nova Sonic. Nova Sonic is a Bedrock Realtime API not usable in Connect flow JSON.",
+      "status": "tested"
+    },
+    {
+      "id": 8,
+      "name": "Self-Learning Test 8 - Q in Connect (CreateWisdomSession)",
+      "folder": "ivr-8-qic",
+      "flowId": "bda66936-6881-47e2-aacb-766b6b2cf636",
+      "components": [
+        "CreateWisdomSession"
+      ],
+      "qicAssistant": {
+        "name": "haohai-QIC",
+        "assistantId": "6eacb18c-c838-484c-9d6a-c9df4d3d6c4c",
+        "assistantArn": "arn:aws:wisdom:us-west-2:988066449281:assistant/6eacb18c-c838-484c-9d6a-c9df4d3d6c4c",
+        "integrationAssociationId": "71264383-2889-46ec-9b6b-96c2d0c10b9a"
+      },
+      "files": {
+        "flow": "flow.json",
+        "testHarness": "test-harness.mjs",
+        "testHarnessDetail": "test-harness-detail.mjs"
+      },
+      "testResults": {
+        "total": 2,
+        "passed": 2,
+        "failed": 0,
+        "details": {
+          "S1-HappyPath": "PASSED",
+          "S2-BroadMatch": "PASSED"
+        }
+      },
+      "bugsFound": [
+        "CreateWisdomSession is silent — no observable event, proceeds to next block",
+        "Test API rejects empty Text in observation — must have at least some text content",
+        "QIC assistant must be associated with Connect instance via create-integration-association before use"
+      ],
+      "status": "tested"
+    }
+  ],
+  "summary": {
+    "totalIVRs": 8,
+    "totalComponentsTested": 18,
+    "totalTestsRun": 24,
+    "totalTestsPassed": 21,
+    "totalTestsFailed": 1,
+    "totalTestsTimedOut": 2,
+    "totalBugsFound": 27,
+    "deploymentRulesDiscovered": 14,
+    "testApiBehaviorRulesDiscovered": 13
+  }
+}

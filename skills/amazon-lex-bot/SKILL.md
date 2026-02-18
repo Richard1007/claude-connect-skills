@@ -10,6 +10,7 @@ description: Create, build, version, and deploy Amazon Lex V2 bots for Connect I
 | Task | Guide |
 |------|-------|
 | Create bot from scratch | Read [create-bot.md](create-bot.md) |
+| Create Nova Sonic S2S bot | Read [create-bot.md](create-bot.md) → Nova Sonic section |
 | QA and validate bot | Read [qa-validation.md](qa-validation.md) |
 | Intent/utterance reference | Read [intent-reference.md](intent-reference.md) |
 
@@ -20,6 +21,8 @@ description: Create, build, version, and deploy Amazon Lex V2 bots for Connect I
 3. **Build before deploy** — Bot must be built (`build-bot-locale`) before creating a version or alias.
 4. **Test before connecting** — Validate the bot responds correctly before referencing it in a Connect flow.
 5. **IAM role required** — Lex bots need a service-linked role.
+6. **Nova Sonic requires generative voice** — Use `--voice-settings '{"engine":"generative","voiceId":"Matthew"}'` on `create-bot-locale`. Only works in us-east-1 and us-west-2.
+7. **Q Connect prompts need versions** — Always `create-ai-prompt-version` before referencing a prompt in an AI agent.
 
 ## Prerequisite Questions (MANDATORY)
 
@@ -59,6 +62,10 @@ After collecting all answers, summarize back to the user:
 - **Include variations** — For each intent, include formal, informal, short, and long utterances.
 - **Associate with Connect** — After creating the bot alias, associate it with the Connect instance.
 - **Wait for build completion** — `build-bot-locale` is async. Poll status until `Built`.
+- **Use generative voice for Nova Sonic** — Pass `--voice-settings '{"engine":"generative","voiceId":"Matthew"}'` in `create-bot-locale`.
+- **Add QinConnectIntent for AI agents** — When using Q Connect, add `AMAZON.QinConnectIntent` to the bot for AI agent handoff.
+- **Write Q Connect prompts to file** — Use `file://` references for AI prompt YAML to avoid JSON escaping issues.
+- **Associate QIC assistant with Connect instance first** — Before using `CreateWisdomSession` in a flow, the Q Connect assistant must be associated with the Connect instance via `aws connect create-integration-association --integration-type WISDOM_ASSISTANT --integration-arn <assistant-arn>`. Verified in IVR #8.
 
 ## What To Avoid
 
@@ -71,32 +78,41 @@ After collecting all answers, summarize back to the user:
 - **Don't create alias without locale settings** — Always include `--bot-alias-locale-settings '{"en_US":{"enabled":true}}'` when creating aliases. Without this, the alias will reject requests.
 - **Don't put conflicting DTMF digits in one bot** — If multiple menu levels reuse digits 1/2/3, create separate bots per menu level.
 - **NEVER delete a bot that's referenced by a live flow** — This will break the flow.
+- **Don't use `SELF_SERVICE_ANSWER_GENERATION` with `MESSAGES` format** — Q Connect pre-processing prompts require `SELF_SERVICE_PRE_PROCESSING` type with `ANTHROPIC_CLAUDE_TEXT_COMPLETIONS` format.
+- **Don't reference an AI prompt without creating a version first** — `create-ai-prompt` creates a DRAFT. You must call `create-ai-prompt-version` before the prompt can be used in an agent.
+- **Don't use Nova Sonic outside supported regions** — Only `us-east-1` and `us-west-2` are supported.
+
+## Native Test API Compatibility **(IVR #3 Finding)**
+
+Lex bots work with the Connect Native Test API. DTMF digits configured as utterances ("1", "2", "3") are correctly matched to intents when tests send `DtmfInput` actions. Verified with SelfLearningTest3Bot: SalesIntent(1), SupportIntent(2), BillingIntent(3) — all 3 passed.
 
 ## Bot Lifecycle
 
+### Traditional Lex Bot
 ```
-1. create-bot
-   → Returns botId
+1. create-bot → Returns botId
+2. create-bot-locale (botId, DRAFT, en_US) → Language, voice, threshold
+3. create-intent (for each) → Utterances, optionally slots
+4. build-bot-locale → Async, poll until Built
+5. create-bot-version → Immutable version (1, 2, 3...)
+6. create-bot-alias → Returns aliasId and aliasArn
+7. associate-bot → Makes bot available in Connect flows
+```
 
-2. create-bot-locale (botId, DRAFT, en_US)
-   → Configures language, voice, confidence threshold
-
-3. create-intent (for each intent)
-   → Define intent name, sample utterances
-   → Optionally add slots
-
-4. build-bot-locale (botId, DRAFT, en_US)
-   → Compiles the NLU model (async — poll until Built)
-
-5. create-bot-version (botId)
-   → Creates immutable version (1, 2, 3...)
-
-6. create-bot-alias (botId)
-   → Creates an alias pointing to the version
-   → Returns aliasId and aliasArn
-
-7. associate-bot with Connect instance
-   → Makes the bot available in Connect flows
+### Nova Sonic S2S Bot (with Q Connect AI Agent)
+```
+1. create-bot → Returns botId (poll until Available)
+2. create-bot-locale WITH --voice-settings '{"engine":"generative","voiceId":"Matthew"}'
+3. create-intent (routing intents + AMAZON.QinConnectIntent)
+4. build-bot-locale → Async, poll until Built
+5. create-bot-version → Immutable version
+6. create-bot-alias → Returns aliasArn
+7. associate-bot → Makes bot available in Connect flows
+8. create-ai-prompt (SELF_SERVICE_PRE_PROCESSING, YAML format)
+9. create-ai-prompt-version → Required before use in agent
+10. create-ai-agent (SELF_SERVICE type, references prompt version)
+11. create-ai-agent-version
+12. update-assistant-ai-agent → Set as default SELF_SERVICE agent
 ```
 
 ## Quick Commands
@@ -173,6 +189,39 @@ aws lexv2-models create-bot-alias \
 aws connect associate-bot \
   --instance-id INSTANCE_ID \
   --lex-v2-bot '{"AliasArn":"arn:aws:lex:REGION:ACCOUNT:bot-alias/BOTID/ALIASID"}' \
+  --profile PROFILE
+```
+
+### Create Nova Sonic locale (generative voice):
+```bash
+aws lexv2-models create-bot-locale \
+  --bot-id BOTID \
+  --bot-version DRAFT \
+  --locale-id en_US \
+  --nlu-intent-confidence-threshold 0.40 \
+  --voice-settings '{"engine":"generative","voiceId":"Matthew"}' \
+  --profile PROFILE
+```
+
+### Create Q Connect AI prompt:
+```bash
+# Write YAML to file, then:
+CONFIG_JSON=$(python3 -c "
+import json
+with open('/tmp/prompt.yaml') as f:
+    yaml_text = f.read()
+print(json.dumps({'textFullAIPromptEditTemplateConfiguration': {'text': yaml_text}}))
+")
+
+aws qconnect create-ai-prompt \
+  --assistant-id ASSISTANT_ID \
+  --name "my-prompt" \
+  --type "SELF_SERVICE_PRE_PROCESSING" \
+  --model-id "anthropic.claude-3-haiku-20240307-v1:0" \
+  --template-type "TEXT_COMPLETIONS" \
+  --api-format "ANTHROPIC_CLAUDE_TEXT_COMPLETIONS" \
+  --template-configuration "$CONFIG_JSON" \
+  --visibility-status SAVED \
   --profile PROFILE
 ```
 

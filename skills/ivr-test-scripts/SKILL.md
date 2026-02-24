@@ -327,14 +327,14 @@ GetParticipantInput("Press 1 for English")
 
 ## Output Format
 
-The output is a single markdown file structured as:
+The output is a single markdown file. It contains ONLY the metadata header and scenario scripts — no Coverage Matrix, no Bot Utterance Reference, no appendix sections.
 
 ```markdown
 # [Flow Name] - Test Scripts
 
-**Phone:** +1 (XXX) XXX-XXXX
-**Hours:** [business hours description]
-**Bots:** [bot names and IDs]
+**Flow ID:** [flow-id]
+**Instance ID:** [instance-id]
+**Bots:** [bot names]
 
 ---
 
@@ -351,14 +351,6 @@ System: Transfers to [queue] / Call disconnects
 
 ## S2: [Name]
 ...
-
----
-
-## Coverage Matrix
-
-| Path | DTMF | Voice | Error | Timeout |
-|------|------|-------|-------|---------|
-| ... | S1 | S4 | S14 | S15 |
 ```
 
 ## Workflow

@@ -1,0 +1,751 @@
+{
+  "Version": "2019-10-30",
+  "StartAction": "280f720a-4475-4515-b101-136790aedcc1",
+  "Metadata": {
+    "entryPointPosition": { "x": 39, "y": 40 },
+    "ActionMetadata": {
+      "280f720a-4475-4515-b101-136790aedcc1": { "position": { "x": 250, "y": 40 } },
+      "bb8c3c78-7a03-44b3-874f-676faaadf4b8": { "position": { "x": 500, "y": 40 } },
+      "bf4da1ed-6c02-4499-8227-1b94f3010727": { "position": { "x": 750, "y": 40 } },
+      "bbc37510-cf74-458d-bdcc-440f4b11c4c8": { "position": { "x": 1050, "y": 40 } },
+      "23552256-a68a-456f-a4ec-12c279bfcdb2": { "position": { "x": 1300, "y": 40 } },
+      "952dd2dc-7727-4829-a8aa-5a03a9448b6d": { "position": { "x": 1600, "y": 40 } },
+      "aaa7b073-dd70-482d-8052-695574597de9": { "position": { "x": 1900, "y": 40 } },
+      "3d914b4d-462d-4477-a414-648053402cf0": { "position": { "x": 1600, "y": 200 } },
+      "a13f9970-87fe-4ab9-9a0a-bbec918bd77f": { "position": { "x": 1900, "y": 200 } },
+      "c34ddfa5-6ed8-4537-b0f3-6c2fb2ddcf82": { "position": { "x": 1600, "y": 360 } },
+      "bc6ad1e8-c81e-4e27-93dd-53ec53b87b72": { "position": { "x": 1900, "y": 360 } },
+      "4f3dd198-4d92-4044-9262-5812b18203c5": { "position": { "x": 1600, "y": 520 } },
+      "d0aec25f-f2ef-4a2a-94fb-39f208f20d9f": { "position": { "x": 1900, "y": 520 } },
+      "dfaeee7b-59d4-4963-b49d-3b420efb30ba": { "position": { "x": 1050, "y": 250 } },
+      "50cf5684-18a5-43aa-9dd6-6981ee859723": { "position": { "x": 1300, "y": 250 } },
+      "22e38d29-200a-404f-82da-a8dc64084105": { "position": { "x": 1600, "y": 680 } },
+      "e6513fc0-b5a0-4f99-99c4-0a24e2810c47": { "position": { "x": 1900, "y": 680 } },
+      "76c0990a-9a8e-4777-946e-fb0bb2609baa": { "position": { "x": 1600, "y": 840 } },
+      "453681af-def3-49cb-8688-8d705f549858": { "position": { "x": 1900, "y": 840 } },
+      "ff255efa-e778-4dc8-9195-8d79f212bdaf": { "position": { "x": 1600, "y": 1000 } },
+      "c5998729-a161-4c77-8f08-88b0bcc7c4c5": { "position": { "x": 1900, "y": 1000 } },
+      "c6ac9a95-f769-4327-8f31-5aa9db17101b": { "position": { "x": 1600, "y": 1160 } },
+      "810a65bd-e929-48d2-bb1a-24e2e113f7e8": { "position": { "x": 1900, "y": 1160 } },
+      "bcbd9b93-708f-4e91-af77-3271ae305587": { "position": { "x": 1050, "y": 460 } },
+      "f87d0656-aa09-47f9-8497-8fdfd159e586": { "position": { "x": 1300, "y": 460 } },
+      "1b836ade-e5c6-4ec0-83b1-6ec064c60d4c": { "position": { "x": 1600, "y": 1320 } },
+      "580f2471-ebaa-4323-9c88-82bf7849677c": { "position": { "x": 1900, "y": 1320 } },
+      "4660d91b-a6be-4d4d-86c7-7d16101362b1": { "position": { "x": 1600, "y": 1480 } },
+      "d808295f-0f27-490c-8d74-13732d6cf08d": { "position": { "x": 1900, "y": 1480 } },
+      "59a1d58b-411e-476e-8ed7-2ecf38752a2f": { "position": { "x": 1600, "y": 1640 } },
+      "38dd6dc6-f75d-4602-a8c9-f6eebfd77ccd": { "position": { "x": 1900, "y": 1640 } },
+      "028e974c-9064-48e3-b08a-7d2f40f52a41": { "position": { "x": 1050, "y": 670 } },
+      "311681cd-8220-4e27-9d3c-b417f0036257": { "position": { "x": 1300, "y": 670 } },
+      "3fc9f5b4-d3bd-4191-8393-981d6ef26707": { "position": { "x": 1600, "y": 1800 } },
+      "b4b93704-f7b9-4a08-b2d4-70ebe6dfeced": { "position": { "x": 1900, "y": 1800 } },
+      "23508202-5eb4-420e-a04a-b58e5da3b075": { "position": { "x": 1600, "y": 1960 } },
+      "99725b4a-6bd9-4fd6-839b-01c751b71eb8": { "position": { "x": 1900, "y": 1960 } },
+      "db37f957-b16c-4dc1-895d-6cd8930df759": { "position": { "x": 1600, "y": 2120 } },
+      "ce1dc0ba-59c9-497c-9c89-0725018cad71": { "position": { "x": 1900, "y": 2120 } },
+      "90db3a16-565c-4991-8a2e-8bb98b4db5e4": { "position": { "x": 1600, "y": 2280 } },
+      "128f865a-d21f-4923-a1dd-6256447aecf2": { "position": { "x": 1900, "y": 2280 } },
+      "820ec4d2-67bd-4cce-931d-8982c586e89c": { "position": { "x": 1050, "y": 880 } },
+      "7e84d0a3-e9b8-42ed-ae71-96247cceaeec": { "position": { "x": 1300, "y": 880 } }
+    }
+  },
+  "Actions": [
+    {
+      "Identifier": "280f720a-4475-4515-b101-136790aedcc1",
+      "Type": "UpdateContactTextToSpeechVoice",
+      "Parameters": {
+        "TextToSpeechEngine": "Generative",
+        "TextToSpeechStyle": "None",
+        "TextToSpeechVoice": "Matthew"
+      },
+      "Transitions": {
+        "NextAction": "bb8c3c78-7a03-44b3-874f-676faaadf4b8",
+        "Conditions": [],
+        "Errors": []
+      }
+    },
+    {
+      "Identifier": "bb8c3c78-7a03-44b3-874f-676faaadf4b8",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "Thank you for calling Sunrise Health Clinic. Your health is our priority."
+      },
+      "Transitions": {
+        "NextAction": "bf4da1ed-6c02-4499-8227-1b94f3010727",
+        "Conditions": [],
+        "Errors": [
+          {
+            "NextAction": "bf4da1ed-6c02-4499-8227-1b94f3010727",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Identifier": "bf4da1ed-6c02-4499-8227-1b94f3010727",
+      "Type": "ConnectParticipantWithLexBot",
+      "Parameters": {
+        "Text": "Please select from the following options. For providers, press 1. For patients, press 2. For pharmacy, press 3. For billing, press 4.",
+        "LexV2Bot": {
+          "AliasArn": "arn:aws:lex:us-west-2:988066449281:bot-alias/YIYDCASELM/BHL7HTQIVQ"
+        }
+      },
+      "Transitions": {
+        "NextAction": "820ec4d2-67bd-4cce-931d-8982c586e89c",
+        "Conditions": [
+          {
+            "NextAction": "bbc37510-cf74-458d-bdcc-440f4b11c4c8",
+            "Condition": {
+              "Operator": "Equals",
+              "Operands": ["ProviderIntent"]
+            }
+          },
+          {
+            "NextAction": "dfaeee7b-59d4-4963-b49d-3b420efb30ba",
+            "Condition": {
+              "Operator": "Equals",
+              "Operands": ["PatientIntent"]
+            }
+          },
+          {
+            "NextAction": "bcbd9b93-708f-4e91-af77-3271ae305587",
+            "Condition": {
+              "Operator": "Equals",
+              "Operands": ["PharmacyIntent"]
+            }
+          },
+          {
+            "NextAction": "028e974c-9064-48e3-b08a-7d2f40f52a41",
+            "Condition": {
+              "Operator": "Equals",
+              "Operands": ["BillingIntent"]
+            }
+          }
+        ],
+        "Errors": [
+          {
+            "NextAction": "820ec4d2-67bd-4cce-931d-8982c586e89c",
+            "ErrorType": "NoMatchingCondition"
+          },
+          {
+            "NextAction": "820ec4d2-67bd-4cce-931d-8982c586e89c",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Identifier": "bbc37510-cf74-458d-bdcc-440f4b11c4c8",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "Thank you, connecting you to provider services."
+      },
+      "Transitions": {
+        "NextAction": "23552256-a68a-456f-a4ec-12c279bfcdb2",
+        "Conditions": [],
+        "Errors": [
+          {
+            "NextAction": "23552256-a68a-456f-a4ec-12c279bfcdb2",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Identifier": "23552256-a68a-456f-a4ec-12c279bfcdb2",
+      "Type": "ConnectParticipantWithLexBot",
+      "Parameters": {
+        "Text": "For referrals, press 1. For prior authorizations, press 2. For provider relations, press 3.",
+        "LexV2Bot": {
+          "AliasArn": "arn:aws:lex:us-west-2:988066449281:bot-alias/V3K0U0TWAX/Y57I6BL11O"
+        }
+      },
+      "Transitions": {
+        "NextAction": "4f3dd198-4d92-4044-9262-5812b18203c5",
+        "Conditions": [
+          {
+            "NextAction": "952dd2dc-7727-4829-a8aa-5a03a9448b6d",
+            "Condition": {
+              "Operator": "Equals",
+              "Operands": ["ReferralsIntent"]
+            }
+          },
+          {
+            "NextAction": "3d914b4d-462d-4477-a414-648053402cf0",
+            "Condition": {
+              "Operator": "Equals",
+              "Operands": ["PriorAuthIntent"]
+            }
+          },
+          {
+            "NextAction": "c34ddfa5-6ed8-4537-b0f3-6c2fb2ddcf82",
+            "Condition": {
+              "Operator": "Equals",
+              "Operands": ["ProviderRelationsIntent"]
+            }
+          }
+        ],
+        "Errors": [
+          {
+            "NextAction": "4f3dd198-4d92-4044-9262-5812b18203c5",
+            "ErrorType": "NoMatchingCondition"
+          },
+          {
+            "NextAction": "4f3dd198-4d92-4044-9262-5812b18203c5",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Identifier": "952dd2dc-7727-4829-a8aa-5a03a9448b6d",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "To submit a referral, please fax your referral form to 5 5 5, 1 2 3, 4 5 6 7. You can also email referrals at referrals at sunrise health dot com. Thank you for calling. Goodbye."
+      },
+      "Transitions": {
+        "NextAction": "aaa7b073-dd70-482d-8052-695574597de9",
+        "Conditions": [],
+        "Errors": [
+          {
+            "NextAction": "aaa7b073-dd70-482d-8052-695574597de9",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Identifier": "aaa7b073-dd70-482d-8052-695574597de9",
+      "Type": "DisconnectParticipant",
+      "Parameters": {},
+      "Transitions": {}
+    },
+    {
+      "Identifier": "3d914b4d-462d-4477-a414-648053402cf0",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "For prior authorization requests, please have your patient insurance ID ready and call our dedicated prior auth line at 5 5 5, 2 3 4, 5 6 7 8. Our team is available Monday through Friday, 8 AM to 5 PM. Thank you. Goodbye."
+      },
+      "Transitions": {
+        "NextAction": "a13f9970-87fe-4ab9-9a0a-bbec918bd77f",
+        "Conditions": [],
+        "Errors": [
+          {
+            "NextAction": "a13f9970-87fe-4ab9-9a0a-bbec918bd77f",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Identifier": "a13f9970-87fe-4ab9-9a0a-bbec918bd77f",
+      "Type": "DisconnectParticipant",
+      "Parameters": {},
+      "Transitions": {}
+    },
+    {
+      "Identifier": "c34ddfa5-6ed8-4537-b0f3-6c2fb2ddcf82",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "For provider relations inquiries, including credentialing and network participation, please email provider relations at sunrise health dot com or call 5 5 5, 3 4 5, 6 7 8 9. Thank you. Goodbye."
+      },
+      "Transitions": {
+        "NextAction": "bc6ad1e8-c81e-4e27-93dd-53ec53b87b72",
+        "Conditions": [],
+        "Errors": [
+          {
+            "NextAction": "bc6ad1e8-c81e-4e27-93dd-53ec53b87b72",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Identifier": "bc6ad1e8-c81e-4e27-93dd-53ec53b87b72",
+      "Type": "DisconnectParticipant",
+      "Parameters": {},
+      "Transitions": {}
+    },
+    {
+      "Identifier": "4f3dd198-4d92-4044-9262-5812b18203c5",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "Sorry, we did not understand your selection. Please try calling again. Goodbye."
+      },
+      "Transitions": {
+        "NextAction": "d0aec25f-f2ef-4a2a-94fb-39f208f20d9f",
+        "Conditions": [],
+        "Errors": [
+          {
+            "NextAction": "d0aec25f-f2ef-4a2a-94fb-39f208f20d9f",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Identifier": "d0aec25f-f2ef-4a2a-94fb-39f208f20d9f",
+      "Type": "DisconnectParticipant",
+      "Parameters": {},
+      "Transitions": {}
+    },
+    {
+      "Identifier": "dfaeee7b-59d4-4963-b49d-3b420efb30ba",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "Thank you, connecting you to patient services."
+      },
+      "Transitions": {
+        "NextAction": "50cf5684-18a5-43aa-9dd6-6981ee859723",
+        "Conditions": [],
+        "Errors": [
+          {
+            "NextAction": "50cf5684-18a5-43aa-9dd6-6981ee859723",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Identifier": "50cf5684-18a5-43aa-9dd6-6981ee859723",
+      "Type": "ConnectParticipantWithLexBot",
+      "Parameters": {
+        "Text": "For appointments, press 1. For prescription refills, press 2. For medical records, press 3.",
+        "LexV2Bot": {
+          "AliasArn": "arn:aws:lex:us-west-2:988066449281:bot-alias/ADUOTCGSBL/G0MXJANXP9"
+        }
+      },
+      "Transitions": {
+        "NextAction": "c6ac9a95-f769-4327-8f31-5aa9db17101b",
+        "Conditions": [
+          {
+            "NextAction": "22e38d29-200a-404f-82da-a8dc64084105",
+            "Condition": {
+              "Operator": "Equals",
+              "Operands": ["AppointmentsIntent"]
+            }
+          },
+          {
+            "NextAction": "76c0990a-9a8e-4777-946e-fb0bb2609baa",
+            "Condition": {
+              "Operator": "Equals",
+              "Operands": ["PrescriptionRefillsIntent"]
+            }
+          },
+          {
+            "NextAction": "ff255efa-e778-4dc8-9195-8d79f212bdaf",
+            "Condition": {
+              "Operator": "Equals",
+              "Operands": ["MedicalRecordsIntent"]
+            }
+          }
+        ],
+        "Errors": [
+          {
+            "NextAction": "c6ac9a95-f769-4327-8f31-5aa9db17101b",
+            "ErrorType": "NoMatchingCondition"
+          },
+          {
+            "NextAction": "c6ac9a95-f769-4327-8f31-5aa9db17101b",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Identifier": "22e38d29-200a-404f-82da-a8dc64084105",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "To schedule, reschedule, or cancel an appointment, please visit our patient portal at sunrise health dot com slash appointments, or press 0 to speak with a scheduling representative. Our next available appointment is typically within 3 business days. Thank you. Goodbye."
+      },
+      "Transitions": {
+        "NextAction": "e6513fc0-b5a0-4f99-99c4-0a24e2810c47",
+        "Conditions": [],
+        "Errors": [
+          {
+            "NextAction": "e6513fc0-b5a0-4f99-99c4-0a24e2810c47",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Identifier": "e6513fc0-b5a0-4f99-99c4-0a24e2810c47",
+      "Type": "DisconnectParticipant",
+      "Parameters": {},
+      "Transitions": {}
+    },
+    {
+      "Identifier": "76c0990a-9a8e-4777-946e-fb0bb2609baa",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "For prescription refills, please have your prescription number ready. You can request refills through our patient portal, or call our pharmacy directly at 5 5 5, 4 5 6, 7 8 9 0. Refills are typically processed within 24 to 48 hours. Thank you. Goodbye."
+      },
+      "Transitions": {
+        "NextAction": "453681af-def3-49cb-8688-8d705f549858",
+        "Conditions": [],
+        "Errors": [
+          {
+            "NextAction": "453681af-def3-49cb-8688-8d705f549858",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Identifier": "453681af-def3-49cb-8688-8d705f549858",
+      "Type": "DisconnectParticipant",
+      "Parameters": {},
+      "Transitions": {}
+    },
+    {
+      "Identifier": "ff255efa-e778-4dc8-9195-8d79f212bdaf",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "To request your medical records, please submit a signed authorization form. You can download the form at sunrise health dot com slash records. Processing takes 5 to 7 business days. For urgent requests, email records at sunrise health dot com. Thank you. Goodbye."
+      },
+      "Transitions": {
+        "NextAction": "c5998729-a161-4c77-8f08-88b0bcc7c4c5",
+        "Conditions": [],
+        "Errors": [
+          {
+            "NextAction": "c5998729-a161-4c77-8f08-88b0bcc7c4c5",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Identifier": "c5998729-a161-4c77-8f08-88b0bcc7c4c5",
+      "Type": "DisconnectParticipant",
+      "Parameters": {},
+      "Transitions": {}
+    },
+    {
+      "Identifier": "c6ac9a95-f769-4327-8f31-5aa9db17101b",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "Sorry, we did not understand your selection. Please try calling again. Goodbye."
+      },
+      "Transitions": {
+        "NextAction": "810a65bd-e929-48d2-bb1a-24e2e113f7e8",
+        "Conditions": [],
+        "Errors": [
+          {
+            "NextAction": "810a65bd-e929-48d2-bb1a-24e2e113f7e8",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Identifier": "810a65bd-e929-48d2-bb1a-24e2e113f7e8",
+      "Type": "DisconnectParticipant",
+      "Parameters": {},
+      "Transitions": {}
+    },
+    {
+      "Identifier": "bcbd9b93-708f-4e91-af77-3271ae305587",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "Thank you, connecting you to pharmacy services."
+      },
+      "Transitions": {
+        "NextAction": "f87d0656-aa09-47f9-8497-8fdfd159e586",
+        "Conditions": [],
+        "Errors": [
+          {
+            "NextAction": "f87d0656-aa09-47f9-8497-8fdfd159e586",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Identifier": "f87d0656-aa09-47f9-8497-8fdfd159e586",
+      "Type": "ConnectParticipantWithLexBot",
+      "Parameters": {
+        "Text": "For refill status, press 1. For new prescriptions, press 2.",
+        "LexV2Bot": {
+          "AliasArn": "arn:aws:lex:us-west-2:988066449281:bot-alias/Y4HZ4SANJO/JVSJ0XLFB8"
+        }
+      },
+      "Transitions": {
+        "NextAction": "59a1d58b-411e-476e-8ed7-2ecf38752a2f",
+        "Conditions": [
+          {
+            "NextAction": "1b836ade-e5c6-4ec0-83b1-6ec064c60d4c",
+            "Condition": {
+              "Operator": "Equals",
+              "Operands": ["RefillStatusIntent"]
+            }
+          },
+          {
+            "NextAction": "4660d91b-a6be-4d4d-86c7-7d16101362b1",
+            "Condition": {
+              "Operator": "Equals",
+              "Operands": ["NewPrescriptionIntent"]
+            }
+          }
+        ],
+        "Errors": [
+          {
+            "NextAction": "59a1d58b-411e-476e-8ed7-2ecf38752a2f",
+            "ErrorType": "NoMatchingCondition"
+          },
+          {
+            "NextAction": "59a1d58b-411e-476e-8ed7-2ecf38752a2f",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Identifier": "1b836ade-e5c6-4ec0-83b1-6ec064c60d4c",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "To check your refill status, please visit our patient portal or call our pharmacy at 5 5 5, 4 5 6, 7 8 9 0. You will need your prescription number and date of birth. Thank you. Goodbye."
+      },
+      "Transitions": {
+        "NextAction": "580f2471-ebaa-4323-9c88-82bf7849677c",
+        "Conditions": [],
+        "Errors": [
+          {
+            "NextAction": "580f2471-ebaa-4323-9c88-82bf7849677c",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Identifier": "580f2471-ebaa-4323-9c88-82bf7849677c",
+      "Type": "DisconnectParticipant",
+      "Parameters": {},
+      "Transitions": {}
+    },
+    {
+      "Identifier": "4660d91b-a6be-4d4d-86c7-7d16101362b1",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "For new prescription inquiries, please contact your provider office directly. If you have a new prescription to fill, you can drop it off at our pharmacy or send it electronically. Our pharmacy hours are Monday through Saturday, 8 AM to 8 PM. Thank you. Goodbye."
+      },
+      "Transitions": {
+        "NextAction": "d808295f-0f27-490c-8d74-13732d6cf08d",
+        "Conditions": [],
+        "Errors": [
+          {
+            "NextAction": "d808295f-0f27-490c-8d74-13732d6cf08d",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Identifier": "d808295f-0f27-490c-8d74-13732d6cf08d",
+      "Type": "DisconnectParticipant",
+      "Parameters": {},
+      "Transitions": {}
+    },
+    {
+      "Identifier": "59a1d58b-411e-476e-8ed7-2ecf38752a2f",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "Sorry, we did not understand your selection. Please try calling again. Goodbye."
+      },
+      "Transitions": {
+        "NextAction": "38dd6dc6-f75d-4602-a8c9-f6eebfd77ccd",
+        "Conditions": [],
+        "Errors": [
+          {
+            "NextAction": "38dd6dc6-f75d-4602-a8c9-f6eebfd77ccd",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Identifier": "38dd6dc6-f75d-4602-a8c9-f6eebfd77ccd",
+      "Type": "DisconnectParticipant",
+      "Parameters": {},
+      "Transitions": {}
+    },
+    {
+      "Identifier": "028e974c-9064-48e3-b08a-7d2f40f52a41",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "Thank you, connecting you to billing services."
+      },
+      "Transitions": {
+        "NextAction": "311681cd-8220-4e27-9d3c-b417f0036257",
+        "Conditions": [],
+        "Errors": [
+          {
+            "NextAction": "311681cd-8220-4e27-9d3c-b417f0036257",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Identifier": "311681cd-8220-4e27-9d3c-b417f0036257",
+      "Type": "ConnectParticipantWithLexBot",
+      "Parameters": {
+        "Text": "To pay a bill, press 1. For insurance questions, press 2. For payment plans, press 3.",
+        "LexV2Bot": {
+          "AliasArn": "arn:aws:lex:us-west-2:988066449281:bot-alias/8NGIBWYVVL/BC9NI3PZPI"
+        }
+      },
+      "Transitions": {
+        "NextAction": "90db3a16-565c-4991-8a2e-8bb98b4db5e4",
+        "Conditions": [
+          {
+            "NextAction": "3fc9f5b4-d3bd-4191-8393-981d6ef26707",
+            "Condition": {
+              "Operator": "Equals",
+              "Operands": ["PayBillIntent"]
+            }
+          },
+          {
+            "NextAction": "23508202-5eb4-420e-a04a-b58e5da3b075",
+            "Condition": {
+              "Operator": "Equals",
+              "Operands": ["InsuranceQuestionsIntent"]
+            }
+          },
+          {
+            "NextAction": "db37f957-b16c-4dc1-895d-6cd8930df759",
+            "Condition": {
+              "Operator": "Equals",
+              "Operands": ["PaymentPlansIntent"]
+            }
+          }
+        ],
+        "Errors": [
+          {
+            "NextAction": "90db3a16-565c-4991-8a2e-8bb98b4db5e4",
+            "ErrorType": "NoMatchingCondition"
+          },
+          {
+            "NextAction": "90db3a16-565c-4991-8a2e-8bb98b4db5e4",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Identifier": "3fc9f5b4-d3bd-4191-8393-981d6ef26707",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "To pay your bill online, visit sunrise health dot com slash pay. You can also mail payments to Sunrise Health Clinic, P O Box 1 2 3 4, Anytown, State, 1 2 3 4 5. For phone payments, please have your account number and credit card ready. Thank you. Goodbye."
+      },
+      "Transitions": {
+        "NextAction": "b4b93704-f7b9-4a08-b2d4-70ebe6dfeced",
+        "Conditions": [],
+        "Errors": [
+          {
+            "NextAction": "b4b93704-f7b9-4a08-b2d4-70ebe6dfeced",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Identifier": "b4b93704-f7b9-4a08-b2d4-70ebe6dfeced",
+      "Type": "DisconnectParticipant",
+      "Parameters": {},
+      "Transitions": {}
+    },
+    {
+      "Identifier": "23508202-5eb4-420e-a04a-b58e5da3b075",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "For insurance and coverage questions, please have your insurance card handy. You can verify your coverage on our website or call our insurance specialists at 5 5 5, 5 6 7, 8 9 0 1, available Monday through Friday 9 AM to 4 PM. Thank you. Goodbye."
+      },
+      "Transitions": {
+        "NextAction": "99725b4a-6bd9-4fd6-839b-01c751b71eb8",
+        "Conditions": [],
+        "Errors": [
+          {
+            "NextAction": "99725b4a-6bd9-4fd6-839b-01c751b71eb8",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Identifier": "99725b4a-6bd9-4fd6-839b-01c751b71eb8",
+      "Type": "DisconnectParticipant",
+      "Parameters": {},
+      "Transitions": {}
+    },
+    {
+      "Identifier": "db37f957-b16c-4dc1-895d-6cd8930df759",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "We offer flexible payment plans for balances over 200 dollars. To set up a payment plan, call our billing office at 5 5 5, 6 7 8, 9 0 1 2 or visit the billing section of our patient portal. Thank you. Goodbye."
+      },
+      "Transitions": {
+        "NextAction": "ce1dc0ba-59c9-497c-9c89-0725018cad71",
+        "Conditions": [],
+        "Errors": [
+          {
+            "NextAction": "ce1dc0ba-59c9-497c-9c89-0725018cad71",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Identifier": "ce1dc0ba-59c9-497c-9c89-0725018cad71",
+      "Type": "DisconnectParticipant",
+      "Parameters": {},
+      "Transitions": {}
+    },
+    {
+      "Identifier": "90db3a16-565c-4991-8a2e-8bb98b4db5e4",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "Sorry, we did not understand your selection. Please try calling again. Goodbye."
+      },
+      "Transitions": {
+        "NextAction": "128f865a-d21f-4923-a1dd-6256447aecf2",
+        "Conditions": [],
+        "Errors": [
+          {
+            "NextAction": "128f865a-d21f-4923-a1dd-6256447aecf2",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Identifier": "128f865a-d21f-4923-a1dd-6256447aecf2",
+      "Type": "DisconnectParticipant",
+      "Parameters": {},
+      "Transitions": {}
+    },
+    {
+      "Identifier": "820ec4d2-67bd-4cce-931d-8982c586e89c",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "Sorry, we were unable to understand your selection. Please try calling again. Goodbye."
+      },
+      "Transitions": {
+        "NextAction": "7e84d0a3-e9b8-42ed-ae71-96247cceaeec",
+        "Conditions": [],
+        "Errors": [
+          {
+            "NextAction": "7e84d0a3-e9b8-42ed-ae71-96247cceaeec",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Identifier": "7e84d0a3-e9b8-42ed-ae71-96247cceaeec",
+      "Type": "DisconnectParticipant",
+      "Parameters": {},
+      "Transitions": {}
+    }
+  ]
+}

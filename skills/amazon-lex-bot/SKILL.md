@@ -23,6 +23,7 @@ description: Create, build, version, and deploy Amazon Lex V2 bots for Connect I
 5. **IAM role required** — Lex bots need a service-linked role.
 6. **Nova Sonic requires generative voice** — Use `--voice-settings '{"engine":"generative","voiceId":"Matthew"}'` on `create-bot-locale`. Only works in us-east-1 and us-west-2.
 7. **Q Connect prompts need versions** — Always `create-ai-prompt-version` before referencing a prompt in an AI agent.
+8. **Q Connect bots MUST use Connect service role** — When using AMAZON.QInConnectIntent, the bot MUST use the Connect-specific service-linked role (`AWSServiceRoleForLexV2Bots_AmazonConnect_*`), NOT the generic Lex role. Set this with `--role-arn` in `create-bot` or `update-bot`. Without this, wisdom:SendMessage permission is missing and QIC fails with AccessDenied.
 
 ## Prerequisite Questions (MANDATORY)
 
@@ -81,6 +82,7 @@ After collecting all answers, summarize back to the user:
 - **Don't use `SELF_SERVICE_ANSWER_GENERATION` with `MESSAGES` format** — Q Connect pre-processing prompts require `SELF_SERVICE_PRE_PROCESSING` type with `ANTHROPIC_CLAUDE_TEXT_COMPLETIONS` format.
 - **Don't reference an AI prompt without creating a version first** — `create-ai-prompt` creates a DRAFT. You must call `create-ai-prompt-version` before the prompt can be used in an agent.
 - **Don't use Nova Sonic outside supported regions** — Only `us-east-1` and `us-west-2` are supported.
+- **Don't use generic Lex role for Q Connect bots** — Bots with AMAZON.QInConnectIntent MUST use the Connect-specific service-linked role (`AWSServiceRoleForLexV2Bots_AmazonConnect_*`). The generic role (`AWSServiceRoleForLexV2Bots_*`) lacks wisdom permissions and causes "AccessDenied: not authorized to perform wisdom:SendMessage" errors. Fix: Run `update-bot` with the correct `--role-arn`.
 
 ## Native Test API Compatibility **(IVR #3 Finding)**
 

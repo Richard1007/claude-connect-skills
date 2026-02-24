@@ -112,9 +112,9 @@ For voice scenarios, vary the caller's phrasing:
 ```markdown
 # [Flow Name] - Test Scripts
 
-**Phone:** +1 (XXX) XXX-XXXX
-**Hours:** [business hours description]
-**Bots:** [bot names and IDs]
+**Flow ID:** [flow-id]
+**Instance ID:** [instance-id]
+**Bots:** [bot names]
 
 ---
 
@@ -130,26 +130,16 @@ System: "[response]"
 
 ## S2: [Name]
 ...
-
----
-
-## Coverage Matrix
-
-| Path | DTMF | Voice | Error | Timeout |
-|------|------|-------|-------|---------|
-| EN Check Auth | S1 | S4 | S14 | S15 |
-| ... | ... | ... | ... | ... |
 ```
 
-## Coverage Checklist
+**Do NOT include** Coverage Matrix, Bot Utterance Reference, or any other appendix sections. The file contains ONLY the metadata header and the scenario scripts.
 
-After generating all scenarios, verify:
-- [ ] Every valid end-to-end path has a DTMF scenario
-- [ ] Every valid end-to-end path has a Voice scenario (if Lex is used)
-- [ ] Invalid input tested at every menu level (DTMF + Voice)
-- [ ] Timeout tested at every menu level
-- [ ] Special keys (#, *, 0) tested
-- [ ] At least one mixed-input scenario exists
-- [ ] After-hours paths all covered (if applicable)
-- [ ] Queue overflow paths all covered (if applicable)
-- [ ] Coverage matrix has no empty cells
+## Coverage Checklist (internal — do NOT output)
+
+After generating all scenarios, internally verify before finalizing:
+- Every valid end-to-end path has a DTMF scenario
+- Every valid end-to-end path has a Voice scenario (if Lex is used)
+- Invalid input tested at every menu level
+- Timeout tested at every menu level
+- At least one mixed-input scenario exists
+- After-hours / queue overflow paths covered (if applicable)

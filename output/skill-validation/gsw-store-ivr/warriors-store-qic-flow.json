@@ -1,0 +1,174 @@
+{
+  "Version": "2019-10-30",
+  "StartAction": "a4910a25-20e9-4252-8f70-c4042b156c6f",
+  "Metadata": {
+    "entryPointPosition": { "x": 39, "y": 40 },
+    "ActionMetadata": {
+      "a4910a25-20e9-4252-8f70-c4042b156c6f": {
+        "position": { "x": 250, "y": 40 }
+      },
+      "9d5d4f4f-b3c3-4bab-9454-e9220eb22ef8": {
+        "position": { "x": 500, "y": 40 }
+      },
+      "c2fbaf5d-3188-4358-bf74-82dd273ff4a7": {
+        "position": { "x": 750, "y": 40 }
+      },
+      "38c1588a-be66-4700-9d4b-14626eea07fe": {
+        "position": { "x": 1000, "y": 40 }
+      },
+      "9aea207b-adff-40cb-afb6-4781ff80d90e": {
+        "position": { "x": 1250, "y": 40 },
+        "parameters": {
+          "LexV2Bot": {
+            "AliasArn": {
+              "displayName": "LiveAlias",
+              "useLexBotDropdown": true,
+              "lexV2BotName": "WarriorsStoreQICBot"
+            }
+          }
+        },
+        "useLexBotDropdown": true,
+        "lexV2BotName": "WarriorsStoreQICBot",
+        "lexV2BotAliasName": "LiveAlias",
+        "conditionMetadata": [
+          {
+            "id": "0cf87673-9ad1-48be-9c92-dc74ee68f304",
+            "value": "EndConversationIntent"
+          }
+        ]
+      },
+      "d4b4f3b7-c47f-426a-93a7-d7176a9b2e0e": {
+        "position": { "x": 1500, "y": 40 }
+      },
+      "3a5732f4-8d90-44d6-a19b-a3ee40d6ee99": {
+        "position": { "x": 1500, "y": 250 }
+      },
+      "12688a3c-08d4-42d5-a51e-d9f68ba99a37": {
+        "position": { "x": 1750, "y": 150 }
+      }
+    }
+  },
+  "Actions": [
+    {
+      "Identifier": "a4910a25-20e9-4252-8f70-c4042b156c6f",
+      "Type": "UpdateContactTextToSpeechVoice",
+      "Parameters": {
+        "TextToSpeechEngine": "Generative",
+        "TextToSpeechStyle": "None",
+        "TextToSpeechVoice": "Matthew"
+      },
+      "Transitions": {
+        "NextAction": "9d5d4f4f-b3c3-4bab-9454-e9220eb22ef8",
+        "Errors": [
+          {
+            "NextAction": "3a5732f4-8d90-44d6-a19b-a3ee40d6ee99",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Identifier": "9d5d4f4f-b3c3-4bab-9454-e9220eb22ef8",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "Welcome to the Warriors Store! I am your AI shopping assistant. I can help you find jerseys, hats, accessories, and all Golden State Warriors merchandise. How can I help you today?"
+      },
+      "Transitions": {
+        "NextAction": "c2fbaf5d-3188-4358-bf74-82dd273ff4a7",
+        "Errors": [],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "c2fbaf5d-3188-4358-bf74-82dd273ff4a7",
+      "Type": "CreateWisdomSession",
+      "Parameters": {
+        "WisdomAssistantArn": "arn:aws:wisdom:us-west-2:988066449281:assistant/6eacb18c-c838-484c-9d6a-c9df4d3d6c4c"
+      },
+      "Transitions": {
+        "NextAction": "38c1588a-be66-4700-9d4b-14626eea07fe",
+        "Errors": [
+          {
+            "NextAction": "3a5732f4-8d90-44d6-a19b-a3ee40d6ee99",
+            "ErrorType": "NoMatchingError"
+          }
+        ],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "38c1588a-be66-4700-9d4b-14626eea07fe",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "I am ready to help! Ask me anything about Warriors gear."
+      },
+      "Transitions": {
+        "NextAction": "9aea207b-adff-40cb-afb6-4781ff80d90e",
+        "Errors": [],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "9aea207b-adff-40cb-afb6-4781ff80d90e",
+      "Type": "ConnectParticipantWithLexBot",
+      "Parameters": {
+        "Text": "How can I help you?",
+        "LexV2Bot": {
+          "AliasArn": "arn:aws:lex:us-west-2:988066449281:bot-alias/B8IGZUUDBP/VVYSEMJXIR"
+        }
+      },
+      "Transitions": {
+        "NextAction": "9aea207b-adff-40cb-afb6-4781ff80d90e",
+        "Conditions": [
+          {
+            "NextAction": "d4b4f3b7-c47f-426a-93a7-d7176a9b2e0e",
+            "Condition": {
+              "Operator": "Equals",
+              "Operands": ["EndConversationIntent"]
+            }
+          }
+        ],
+        "Errors": [
+          {
+            "NextAction": "9aea207b-adff-40cb-afb6-4781ff80d90e",
+            "ErrorType": "NoMatchingCondition"
+          },
+          {
+            "NextAction": "3a5732f4-8d90-44d6-a19b-a3ee40d6ee99",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Identifier": "d4b4f3b7-c47f-426a-93a7-d7176a9b2e0e",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "Thank you for shopping with the Warriors Store! Go Dubs!"
+      },
+      "Transitions": {
+        "NextAction": "12688a3c-08d4-42d5-a51e-d9f68ba99a37",
+        "Errors": [],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "3a5732f4-8d90-44d6-a19b-a3ee40d6ee99",
+      "Type": "MessageParticipant",
+      "Parameters": {
+        "Text": "We are experiencing technical difficulties. Please try again later. Goodbye."
+      },
+      "Transitions": {
+        "NextAction": "12688a3c-08d4-42d5-a51e-d9f68ba99a37",
+        "Errors": [],
+        "Conditions": []
+      }
+    },
+    {
+      "Identifier": "12688a3c-08d4-42d5-a51e-d9f68ba99a37",
+      "Type": "DisconnectParticipant",
+      "Parameters": {},
+      "Transitions": {}
+    }
+  ]
+}

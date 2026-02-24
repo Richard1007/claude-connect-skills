@@ -212,6 +212,49 @@ This pattern is fully testable with the AWS Native Test API because each retry u
 
 **Fix:** Every `MessageReceived` observation must have non-empty `Text` in `Properties`. Use `MatchingCriteria: "Inclusion"` with a keyword fragment rather than trying to match empty text.
 
+### Rule 18: Multi-Turn QIC Conversations Require Loop-Back Architecture **(GSW Store IVR Finding)**
+**Issue:** After the first Q in Connect (QIC) AI response, the call disconnects instead of allowing follow-up questions. This happens when `ConnectParticipantWithLexBot` routes to disconnect on success.
+
+**Root cause:** By default, when using AMAZON.QInConnectIntent as a fallback intent in Lex, the flow considers the conversation "complete" after one AI response. Without explicit loop-back logic, the flow proceeds to the next action (typically disconnect).
+
+**Fix:** Configure `ConnectParticipantWithLexBot` to loop back to itself for multi-turn conversations:
+
+```json
+{
+  "Type": "ConnectParticipantWithLexBot",
+  "Identifier": "lex-bot-block-id",
+  "Transitions": {
+    "NextAction": "lex-bot-block-id",  // ← Points to ITSELF (creates loop)
+    "Conditions": [
+      {
+        "NextAction": "disconnect-block-id",  // ← Only disconnect on explicit end intent
+        "Condition": {
+          "Operator": "Equals",
+          "Operands": ["EndConversationIntent"]
+        }
+      }
+    ],
+    "Errors": [
+      {
+        "NextAction": "lex-bot-block-id",  // ← Loop on NoMatchingCondition (fallback)
+        "ErrorType": "NoMatchingCondition"
+      }
+    ]
+  }
+}
+```
+
+**How it works:**
+1. First question triggers AMAZON.QInConnectIntent (fallback) → QIC AI responds
+2. NoMatchingCondition error fires (no specific intent matched) → Loops back to Lex bot
+3. User can ask follow-up question → Lex bot still active, session preserved
+4. Repeat until user says "goodbye" or triggers EndConversationIntent
+5. Only then does flow route to disconnect
+
+**CRITICAL:** Without this loop, QIC-powered IVRs only support single-turn conversations. The loop-back pattern enables true multi-turn dialogue.
+
+**Context limitation:** AMAZON.QInConnectIntent does NOT maintain conversational context automatically. Each question is treated as a new topic unless you implement explicit context management in your QIC prompt or via session attributes.
+
 ## What To Avoid
 
 - **Don't use `InvokeExternalResource` or `Loop`** — These types are rejected by the API. See the table above.
@@ -225,6 +268,7 @@ This pattern is fully testable with the AWS Native Test API because each retry u
 - **Don't mix up `GetParticipantInput` (DTMF-only) and `ConnectParticipantWithLexBot` (Lex V2 / Nova Sonic)** — These are different action types. Use `ConnectParticipantWithLexBot` when integrating with a Lex V2 bot or a Nova Sonic S2S bot.
 - **Don't use `ConnectParticipantWithLexBot` without first creating and deploying the Lex bot** — The bot alias ARN must exist.
 - **Don't use `ConnectParticipantWithLexBot` with `AMAZON.QinConnectIntent` without `CreateWisdomSession` first** — The Q Connect session must be created on the contact before the Lex bot can hand off to the AI agent. Without it, Q Connect never triggers.
+- **Don't forget to loop back `ConnectParticipantWithLexBot` for QIC multi-turn** — If using Q in Connect AI agents, the Lex bot block must point back to itself (via NoMatchingCondition error) to enable follow-up questions. Without the loop, the call disconnects after the first response.
 - **Don't call `TransferContactToQueue` without `UpdateContactTargetQueue` first** — The queue must be set before transferring.
 - **Don't omit `Transitions: {}` on `DisconnectParticipant` blocks** — Even terminal blocks require this key.
 - **Don't omit `Text` parameter from `GetParticipantInput`** — The prompt text belongs inside the block, not in a separate MessageParticipant.
